@@ -1,0 +1,1468 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light}html,body{margin:0}</style>
+<title>So'zle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: fixed league scene behind one centered column of screens (menu, modes, game, leaderboard). */
+:root {
+  --bg: #EDF3F2;
+  --surface: #FFFFFF;
+  --ink: #10253A;
+  --muted: #566B7B;
+  --line: #C4D4D2;
+  --accent: #1B4FA0;
+  --on-accent: #FFFFFF;
+  --ok: #2F7D4F;
+  --warn: #E3B93C;
+  --on-warn: #1B1A12;
+  --off: #3A4651;
+  --key: #D5E2E0;
+  --dim: rgba(255, 255, 255, 0);
+  --m1: #C99A12;
+  --m2: #8D99A6;
+  --m3: #B87333;
+  --bad: #B3402F;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-wood: #8B5E3C;
+  --r-bronze: #B87333;
+  --r-silver: #8D99A6;
+  --r-gold: #C99A12;
+  --r-platinum: #3E9FA0;
+  --r-diamond: #2F8FD8;
+  --r-crown: #8E44AD;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1822;
+    --surface: #132634;
+    --ink: #E6EFF1;
+    --muted: #8DA3B1;
+    --line: #264050;
+    --accent: #7AA9F2;
+    --on-accent: #0C1822;
+    --off: #2A3945;
+    --key: #223847;
+    --dim: rgba(6, 14, 22, 0.5);
+    --m2: #A9B4C0;
+    --bad: #E57966;
+    --r-silver: #A9B4C0;
+    --r-platinum: #5CC0C1;
+    --r-diamond: #55AEF0;
+    --r-crown: #B073CF;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1822;
+  --surface: #132634;
+  --ink: #E6EFF1;
+  --muted: #8DA3B1;
+  --line: #264050;
+  --accent: #7AA9F2;
+  --on-accent: #0C1822;
+  --off: #2A3945;
+  --key: #223847;
+  --dim: rgba(6, 14, 22, 0.5);
+  --m2: #A9B4C0;
+  --bad: #E57966;
+  --r-silver: #A9B4C0;
+  --r-platinum: #5CC0C1;
+  --r-diamond: #55AEF0;
+  --r-crown: #B073CF;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.45;
+  padding-block: 14px 28px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:focus-visible, summary:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+.scene { position: fixed; inset: 0; z-index: 0; pointer-events: none; animation: sceneIn .8s ease; }
+.scene svg { display: block; width: 100%; height: 100%; }
+.scene::after { content: ""; position: absolute; inset: 0; background: var(--dim); }
+@keyframes sceneIn { from { opacity: 0; } to { opacity: 1; } }
+
+.app { position: relative; z-index: 1; max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.app.wide { max-width: 720px; }
+.card { background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.screen { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.top .l { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.iconbtn { width: 38px; height: 38px; flex: none; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 94%, transparent); font-size: 18px; padding: 0; }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: -0.02em; line-height: 1; margin: 0; padding: 7px 14px; border-radius: 12px; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); }
+.chip { display: inline-flex; align-items: center; gap: 8px; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px 6px 9px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+.dot { width: 13px; height: 13px; border-radius: 50%; background: var(--muted); flex: none; }
+
+.btn { display: block; width: 100%; background: var(--accent); color: var(--on-accent); border: 0; border-radius: 12px; padding: 14px 18px; font-weight: 700; font-size: 16px; text-align: center; }
+.btn.ghost { background: color-mix(in srgb, var(--surface) 94%, transparent); color: var(--ink); border: 1px solid var(--line); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.note { color: var(--muted); font-size: 13px; margin: 0; }
+.screen > .note, .screen > .strip, .screen > .timer, .screen > .opp, .screen > .msg:not(:empty) {
+  background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 12px; padding: 8px 14px;
+}
+.screen > .timer { margin-top: 0; }
+.hero h2 { font-family: var(--font-display); font-size: 26px; line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.01em; text-wrap: balance; }
+.hero p { margin: 0; color: var(--muted); }
+.hero { padding: 18px 16px; }
+
+.modes { display: grid; gap: 10px; }
+.mode { text-align: left; display: grid; gap: 2px; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.mode b { font-family: var(--font-display); font-size: 19px; }
+.mode span { color: var(--muted); font-size: 13px; }
+.mode.locked { opacity: .6; }
+.mode:hover:not(:disabled) { border-color: var(--accent); }
+
+.auth { display: flex; align-items: center; gap: 14px; }
+.auth img { width: 54px; height: 54px; border-radius: 50%; flex: none; background: var(--key); }
+.auth b { display: block; font-size: 17px; }
+
+.rank-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.rank-name { font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+.rank-name small { font-family: var(--font-body); font-weight: 500; font-size: 14px; color: var(--muted); }
+.pts { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+.bar { height: 10px; background: var(--key); border-radius: 999px; overflow: hidden; margin: 10px 0; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .5s ease; }
+.rank-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+details.ladder { margin-top: 10px; }
+details.ladder summary { cursor: pointer; font-weight: 700; font-size: 14px; color: var(--accent); list-style: none; width: fit-content; }
+details.ladder summary::-webkit-details-marker { display: none; }
+details.ladder summary::after { content: " \25BE"; }
+details.ladder[open] summary::after { content: " \25B4"; }
+.table-wrap { overflow-x: auto; margin-top: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+tr.me td { font-weight: 700; background: var(--key); }
+td .dot { display: inline-block; vertical-align: -2px; margin-right: 8px; width: 11px; height: 11px; }
+.rules { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+
+.strip { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }
+.strip .lab { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 12px; }
+.strip b.pill { font-family: var(--font-display); font-size: 16px; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 999px; padding: 3px 14px; }
+.pbtn { background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 14px; font-weight: 700; font-size: 13px; }
+.pbtn b { background: var(--accent); color: var(--on-accent); border-radius: 999px; padding: 0 7px; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.pbtn:disabled { opacity: .45; cursor: not-allowed; }
+.timer { text-align: center; color: var(--muted); font-size: 12px; margin-top: -6px; }
+.slots { display: flex; justify-content: center; gap: 6px; align-items: center; }
+.slots .cap { color: var(--muted); font-size: 12px; margin-right: 4px; }
+.slot { width: 38px; height: 38px; border-radius: 8px; border: 2px dashed var(--line); background: color-mix(in srgb, var(--surface) 94%, transparent); font-family: var(--font-display); font-weight: 800; font-size: 17px; padding: 0; text-transform: uppercase; }
+.slot.pick { border-color: var(--accent); color: var(--accent); }
+.slot.shown { border: 2px solid var(--ok); color: var(--ok); cursor: default; }
+
+.opp { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.opp .who { font-size: 13px; color: var(--muted); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opp .who b { color: var(--ink); }
+.mini { display: grid; grid-template-columns: repeat(5, 9px); gap: 2px; }
+.mini i { width: 9px; height: 9px; border-radius: 2px; background: var(--key); display: block; }
+.mini i.g { background: var(--ok); }
+.mini i.y { background: var(--warn); }
+.mini i.b { background: var(--off); }
+.count { text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 40px; min-height: 48px; }
+
+.board { display: grid; grid-template-rows: repeat(var(--rows, 6), 1fr); gap: 6px; width: min(100%, 330px); margin: 2px auto 0; }
+.row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.tile {
+  position: relative; aspect-ratio: 1; display: grid; place-items: center;
+  border: 2px solid var(--line); border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 7.5vw, 31px);
+  text-transform: uppercase; user-select: none;
+}
+.tile.long { font-size: clamp(17px, 5.8vw, 24px); letter-spacing: -0.03em; }
+.alpharow { align-items: center; }
+.segs { display: inline-flex; background: var(--key); border-radius: 10px; padding: 3px; gap: 3px; flex: none; }
+.seg { border: 0; background: transparent; border-radius: 7px; padding: 7px 14px; font-weight: 700; color: var(--muted); cursor: pointer; font: inherit; font-weight: 700; }
+.seg[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.14); }
+.tile.filled { border-color: var(--accent); animation: pop .16s ease; }
+.tile.ok, .tile.warn, .tile.off { border-color: transparent; color: #fff; }
+.tile.ok { background: var(--ok); }
+.tile.warn { background: var(--warn); color: var(--on-warn); }
+.tile.off { background: var(--off); }
+.tile[data-n]::after { content: attr(data-n); position: absolute; top: 3px; right: 6px; font-family: var(--font-body); font-size: 12px; font-weight: 700; line-height: 1; }
+.tile.reveal { animation: reveal .45s ease backwards; }
+.tile.win { animation: bounce .6s ease; }
+.row.shake { animation: shake .35s; }
+@keyframes pop { 0% { transform: scale(.86); } 60% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes reveal { 0% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+@keyframes shake { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } 70% { transform: translateY(2px); } }
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 20; }
+.confetti i { position: absolute; top: -14px; width: 9px; height: 14px; border-radius: 2px; animation: fall 1.6s ease-in forwards; }
+@keyframes fall { to { transform: translate(var(--dx), 105vh) rotate(var(--rot)); opacity: .9; } }
+
+.msg { min-height: 48px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-weight: 500; }
+.msg b { font-family: var(--font-display); font-size: 18px; }
+.msg.win b { animation: rise .5s ease; }
+@keyframes rise { from { transform: translateY(8px) scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+.again { background: var(--accent); color: var(--on-accent); border: 0; border-radius: 10px; padding: 9px 18px; font-weight: 700; }
+.again.ghost { background: color-mix(in srgb, var(--surface) 94%, transparent); color: var(--ink); border: 1px solid var(--line); }
+.msg .btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+.kb { display: flex; flex-direction: column; gap: 6px; }
+.krow { display: flex; gap: 5px; }
+.key { flex: 1 1 0; min-width: 0; height: 52px; border: 0; border-radius: 7px; background: var(--key); font-weight: 700; font-size: 15px; padding: 0; text-transform: uppercase; touch-action: manipulation; transition: transform .06s ease; }
+.key:active { transform: scale(.92); }
+.key.wide { flex: 1.6 1 0; font-size: 12px; }
+.key.ok { background: var(--ok); color: #fff; }
+.key.warn { background: var(--warn); color: var(--on-warn); }
+.key.off { background: var(--off); color: #fff; opacity: .85; }
+.key:disabled { opacity: .4; cursor: not-allowed; }
+
+.codebox { font-family: var(--font-display); font-weight: 800; font-size: 34px; letter-spacing: .18em; text-align: center; text-transform: uppercase; padding: 8px 0; }
+.field { display: flex; gap: 8px; flex-wrap: wrap; }
+.field input, textarea { flex: 1 1 160px; min-width: 0; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+textarea { width: 100%; min-height: 120px; resize: vertical; }
+.field .go { flex: none; width: auto; padding: 10px 18px; }
+.spin { width: 38px; height: 38px; border-radius: 50%; border: 4px solid var(--key); border-top-color: var(--accent); margin: 8px auto; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.setrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; }
+.setrow b { display: block; }
+.switch { width: 52px; height: 30px; border-radius: 999px; border: 1px solid var(--line); background: var(--key); position: relative; padding: 0; flex: none; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); transition: transform .15s ease; }
+.switch[aria-checked="true"] { background: var(--ok); border-color: var(--ok); }
+.switch[aria-checked="true"]::after { transform: translateX(22px); }
+
+.lb-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.lb-head h2 { font-family: var(--font-display); font-size: 24px; margin: 0; letter-spacing: -0.01em; }
+.link { background: none; border: 0; color: var(--accent); font-weight: 700; padding: 0; font-size: 13px; text-decoration: underline; }
+.banner { background: var(--key); border-radius: 10px; padding: 8px 12px; font-size: 13px; }
+.podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 8px; }
+.pod { min-width: 0; border: 1px solid var(--line); border-bottom: 0; border-radius: 14px 14px 0 0; background: color-mix(in srgb, var(--surface) 94%, transparent); padding: 14px 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 3px; text-align: center; }
+.pod.p1 { min-height: 200px; }
+.pod.p2 { min-height: 160px; }
+.pod.p3 { min-height: 132px; }
+.medal { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 20px; color: #fff; }
+.p1 .medal { width: 56px; height: 56px; font-size: 26px; background: var(--m1); }
+.p2 .medal { background: var(--m2); }
+.p3 .medal { background: var(--m3); }
+.pod .nm { font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.p1 .nm { font-size: 17px; }
+.pod .tr { font-size: 12px; color: var(--muted); }
+.pod .sc { font-family: var(--font-display); font-weight: 800; font-size: 22px; font-variant-numeric: tabular-nums; }
+.p1 .sc { font-size: 30px; }
+.pod.empty { opacity: .55; }
+.pod.me { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
+.lb-list { list-style: none; margin: 0; padding: 0; background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.lb-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 9px 14px; border-bottom: 1px solid var(--line); }
+.lb-row:last-child { border-bottom: 0; }
+.lb-row.me { background: var(--key); }
+.lb-row .no { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; }
+.lb-row .who { min-width: 0; }
+.lb-row .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-row .who span { font-size: 12px; color: var(--muted); }
+.lb-row .pt { font-variant-numeric: tabular-nums; font-weight: 700; }
+.empty-state { background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px dashed var(--line); border-radius: 14px; padding: 18px 16px; text-align: center; color: var(--muted); }
+
+.toast { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 500; opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 30; max-width: calc(100vw - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.noanim *, .noanim *::before, .noanim *::after { animation: none !important; transition: none !important; }
+.noanim .confetti { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .tile, .tile.reveal, .tile.filled, .tile.win, .row.shake, .spin, .scene, .msg.win b { animation: none; }
+  .confetti { display: none; }
+  .bar > i, .toast { transition: none; }
+}
+@media (max-width: 380px) { .key { height: 48px; font-size: 14px; } .krow { gap: 4px; } .pod .sc { font-size: 19px; } .p1 .sc { font-size: 25px; } }
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene" aria-hidden="true"></div>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="l">
+      <button class="iconbtn" id="backBtn" type="button" aria-label="Orqaga" hidden>&#8592;</button>
+      <h1>So'zle</h1>
+    </div>
+    <div class="chip" id="chip" hidden><span class="dot" id="chipDot"></span><span id="chipName">Wood</span></div>
+  </header>
+
+  <section class="screen" id="s-home">
+    <div class="card hero">
+      <h2>Harflarni toping, ligalarda ko'tariling</h2>
+      <p>5 belgili o'zbekcha so'zni toping. Wood'dan Crown'gacha 21 daraja sizni kutmoqda.</p>
+    </div>
+    <button class="btn" id="playBtn" type="button">O'ynash</button>
+    <button class="btn ghost" id="setBtn" type="button">Sozlamalar</button>
+    <button class="btn ghost" id="conBtn" type="button">Aloqa</button>
+  </section>
+
+  <section class="screen" id="s-auth" hidden>
+    <div class="card auth">
+      <img id="avatar" alt="" width="54" height="54">
+      <div><b id="authName">Mehmon</b><span class="note" id="authNote"></span></div>
+    </div>
+    <button class="btn" id="authGo" type="button">Davom etish</button>
+    <p class="note" id="authInfo"></p>
+  </section>
+
+  <section class="screen" id="s-modes" hidden>
+    <div class="card" aria-label="Daraja">
+      <div class="rank-top">
+        <span class="rank-name"><span id="rankName">Wood</span> <small id="tierName"></small></span>
+        <span class="pts" id="pts">0 ball</span>
+      </div>
+      <div class="bar" role="progressbar" id="barWrap" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="bar"></i></div>
+      <div class="rank-foot"><span id="toNext"></span><span id="stats"></span></div>
+      <details class="ladder">
+        <summary>Ligalar va qoidalar</summary>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Liga</th><th>Darajalar</th><th>Ball</th><th>Yutqazsa</th></tr></thead>
+            <tbody id="ladder"></tbody>
+          </table>
+        </div>
+        <p class="rules">Rankli rejimda topilgan urinish uchun ball: 1-urinishda 6, 2-da 5, 3-da 4, 4-da 3, 5-da 2, 6-da 1. Gold ligasiga yetgach rankli rejim yopiladi, o'yin faqat musobaqada davom etadi. Musobaqada yutsangiz (7 minus urinishlar soni) va yana 3 ball olasiz, Gold'dan boshlab yutqazsangiz ball ayriladi. Yangi darajaga birinchi chiqishda 1 ta harf ochish maslahati beriladi, darajadan tushib qaytsangiz berilmaydi.</p>
+      </details>
+    </div>
+    <div class="modes">
+      <button class="mode" id="mRanked" type="button"><b>Rankli</b><span id="mRankedNote">Ball to'plang va ligalarda ko'tariling</span></button>
+      <button class="mode" id="mFree" type="button"><b>Ranksiz</b><span>Mashq uchun: oson, o'rta, qattiq. Ball berilmaydi</span></button>
+      <button class="mode" id="mComp" type="button"><b>Musobaqa</b><span>Boshqa o'yinchi bilan bir xil so'zni kim tez topadi</span></button>
+    </div>
+    <button class="btn ghost" id="mLb" type="button">Reytingni ko'rish</button>
+  </section>
+
+  <section class="screen" id="s-free" hidden>
+    <div class="card hero"><h2>Ranksiz rejim</h2><p>Faqat mashq uchun. Ball ham, rank ham o'zgarmaydi.</p></div>
+    <div class="modes">
+      <button class="mode" data-diff="easy" type="button"><b>Oson</b><span>7 urinish, so'z turi ko'rinadi, 2 ta harf ochish. Faqat otlar</span></button>
+      <button class="mode" data-diff="medium" type="button"><b>O'rta</b><span>6 urinish, so'z turi ko'rinadi, 1 ta harf ochish. Ot va sifat</span></button>
+      <button class="mode" data-diff="hard" type="button"><b>Qattiq</b><span>5 urinish, so'z turi yashirin, harf ochish yo'q. Barcha so'zlar</span></button>
+    </div>
+    <button class="btn ghost" id="freeFriend" type="button">Do'st bilan o'ynash</button>
+  </section>
+
+  <section class="screen" id="s-comp" hidden>
+    <div class="card hero"><h2>Musobaqa</h2><p>Ikkovingizga bir xil so'z beriladi. Kam urinishda topgan yutadi, teng bo'lsa tezroq topgan.</p></div>
+    <div class="modes">
+      <button class="mode" id="compRandom" type="button"><b>Tasodifiy raqib</b><span>Sizning ligangizdagi onlayn o'yinchi topiladi</span></button>
+      <button class="mode" id="compFriend" type="button"><b>Do'st bilan</b><span>Kod orqali taklif qiling. Liga bir xil bo'lishi kerak</span></button>
+    </div>
+    <p class="note" id="compNote"></p>
+  </section>
+
+  <section class="screen" id="s-friend" hidden>
+    <div class="card">
+      <b id="friendTitle">Do'st bilan</b>
+      <p class="note" id="friendRule"></p>
+    </div>
+    <div class="card" id="hostBox">
+      <button class="btn" id="hostBtn" type="button">Xona ochish</button>
+      <div id="hostCode" hidden>
+        <div class="codebox" id="codeText"></div>
+        <p class="note">Do'stingizga shu kodni yuboring va u shu sahifada "Kod bilan kirish" ga yozsin.</p>
+        <div class="spin" aria-hidden="true"></div>
+        <p class="note" id="hostState">Do'st kutilmoqda...</p>
+      </div>
+    </div>
+    <form class="card field" id="joinForm">
+      <input id="joinInput" type="text" inputmode="text" maxlength="5" autocomplete="off" placeholder="Kod bilan kirish" aria-label="Xona kodi">
+      <button class="btn go" type="submit">Kirish</button>
+    </form>
+    <p class="note" id="friendMsg"></p>
+  </section>
+
+  <section class="screen" id="s-queue" hidden>
+    <div class="card hero" style="text-align:center">
+      <h2>Raqib qidirilmoqda</h2>
+      <div class="spin" aria-hidden="true"></div>
+      <p id="queueNote">Sizning ligangizdagi onlayn o'yinchi izlanmoqda...</p>
+    </div>
+    <button class="btn ghost" id="queueCancel" type="button">Bekor qilish</button>
+  </section>
+
+  <section class="screen" id="s-game" hidden>
+    <div class="strip" id="strip">
+      <span class="lab" id="typeLab">So'z turi</span><b class="pill" id="hintText">ot</b>
+      <button class="pbtn" id="hintBtn" type="button">Harf ochish <b id="hintCount">0</b></button>
+    </div>
+    <div class="timer" id="hintTimer"></div>
+    <div class="slots" id="slots" hidden></div>
+    <div class="opp" id="opp" hidden>
+      <span class="who" id="oppWho"></span>
+      <div class="mini" id="oppMini"></div>
+    </div>
+    <div class="count" id="count" hidden></div>
+    <div class="board" id="board" aria-label="O'yin maydoni"></div>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    <div class="kb" id="kb"></div>
+  </section>
+
+  <section class="screen" id="s-lb" hidden>
+    <div class="lb-head">
+      <h2>Reyting</h2>
+      <button class="link" id="sampleBtn" type="button">Namuna ko'rinishni ko'rsatish</button>
+    </div>
+    <div class="banner" id="sampleBanner" hidden>Bu namuna ko'rinish. Ro'yxatdagilar haqiqiy o'yinchilar emas.</div>
+    <div class="podium" id="podium"></div>
+    <ol class="lb-list" id="lbList" hidden></ol>
+    <div class="empty-state" id="lbEmpty" hidden></div>
+    <form class="field" id="nickForm">
+      <input id="nickInput" type="text" maxlength="14" autocomplete="off" placeholder="Taxallus (3-14 belgi)" aria-label="Taxallus">
+      <button class="btn go" type="submit">Saqlash</button>
+    </form>
+    <p class="note" id="lbNote"></p>
+  </section>
+
+  <section class="screen" id="s-settings" hidden>
+    <div class="card">
+      <div class="setrow"><div><b>Ovoz</b><span class="note">Harf, javob va g'alaba ovozlari</span></div><button class="switch" id="swSound" role="switch" aria-checked="true" aria-label="Ovoz" type="button"></button></div>
+      <div class="setrow"><div><b>Animatsiya</b><span class="note">Harf yozish, katak aylanishi, konfeti, fon</span></div><button class="switch" id="swAnim" role="switch" aria-checked="true" aria-label="Animatsiya" type="button"></button></div>
+    </div>
+    <div class="card"><div class="setrow alpharow"><div><b>Alifbo</b><span class="note">Yangi (2026): Ş Ç Ö Ğ. Eski: SH CH O' G'</span></div>
+      <div class="segs" role="group" aria-label="Alifbo"><button class="seg" id="alphaNew" type="button" aria-pressed="true">Yangi</button><button class="seg" id="alphaOld" type="button" aria-pressed="false">Eski</button></div></div></div>
+    <p class="note">Sozlamalar shu qurilmada saqlanadi.</p>
+  </section>
+
+  <section class="screen" id="s-contact" hidden>
+    <div class="card hero"><h2>Aloqa</h2><p>Xato so'z, taklif yoki muammo haqida yozing. Xabar to'g'ridan-to'g'ri ilova egasiga boradi.</p></div>
+    <form class="screen" id="contactForm">
+      <textarea id="contactText" maxlength="1000" placeholder="Xabaringiz..." aria-label="Xabar"></textarea>
+      <button class="btn" type="submit">Yuborish</button>
+    </form>
+    <p class="note" id="contactNote"></p>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Lug'at: javob so'zlari (so'z turi bilan) va faqat taxmin uchun ruxsat etilgan so'zlar. */
+const DICT = {"answers": [["baliq", "ot"], ["buzoq", "ot"], ["tulki", "ot"], ["quyon", "ot"], ["sigir", "ot"], ["kiyik", "ot"], ["mayna", "ot"], ["cho'chqa", "ot"], ["xo'roz", "ot"], ["tovuq", "ot"], ["ho'kiz", "ot"], ["chayon", "ot"], ["chivin", "ot"], ["lochin", "ot"], ["mushuk", "ot"], ["kuchuk", "ot"], ["o'rdak", "ot"], ["qarg'a", "ot"], ["zebra", "ot"], ["akula", "ot"], ["pashsha", "ot"], ["burga", "ot"], ["xachir", "ot"], ["tuxum", "ot"], ["yilqi", "ot"], ["oqqush", "ot"], ["kakku", "ot"], ["somsa", "ot"], ["manti", "ot"], ["sho'rva", "ot"], ["norin", "ot"], ["qatiq", "ot"], ["kabob", "ot"], ["shakar", "ot"], ["qahva", "ot"], ["limon", "ot"], ["gilos", "ot"], ["banan", "ot"], ["anjir", "ot"], ["xurmo", "ot"], ["pista", "ot"], ["bodom", "ot"], ["qovun", "ot"], ["sabzi", "ot"], ["piyoz", "ot"], ["karam", "ot"], ["ko'kat", "ot"], ["no'xat", "ot"], ["guruch", "ot"], ["makka", "ot"], ["holva", "ot"], ["kulcha", "ot"], ["patir", "ot"], ["palov", "ot"], ["mayiz", "ot"], ["devor", "ot"], ["hovli", "ot"], ["ayvon", "ot"], ["kursi", "ot"], ["gilam", "ot"], ["parda", "ot"], ["ko'rpa", "ot"], ["adyol", "ot"], ["chiroq", "ot"], ["lampa", "ot"], ["kalit", "ot"], ["qoshiq", "ot"], ["pichoq", "ot"], ["likop", "ot"], ["tovoq", "ot"], ["qozon", "ot"], ["tuvak", "ot"], ["chelak", "ot"], ["xalta", "ot"], ["sumka", "ot"], ["ro'mol", "ot"], ["tufli", "ot"], ["kalish", "ot"], ["do'ppi", "ot"], ["chopon", "ot"], ["kamar", "ot"], ["yuzuk", "ot"], ["palto", "ot"], ["xalat", "ot"], ["shapka", "ot"], ["kiyim", "ot"], ["bilak", "ot"], ["quloq", "ot"], ["burun", "ot"], ["yelka", "ot"], ["panja", "ot"], ["tizza", "ot"], ["tovon", "ot"], ["qorin", "ot"], ["yurak", "ot"], ["jigar", "ot"], ["suyak", "ot"], ["tomir", "ot"], ["soqol", "ot"], ["yonoq", "ot"], ["tomoq", "ot"], ["bo'yin", "ot"], ["quyosh", "ot"], ["osmon", "ot"], ["bulut", "ot"], ["shamol", "ot"], ["tuman", "ot"], ["bahor", "ot"], ["daryo", "ot"], ["o'rmon", "ot"], ["terak", "ot"], ["chinor", "ot"], ["novda", "ot"], ["ildiz", "ot"], ["maysa", "ot"], ["buloq", "ot"], ["jilg'a", "ot"], ["shahar", "ot"], ["bozor", "ot"], ["bekat", "ot"], ["motor", "ot"], ["yo'lak", "ot"], ["temir", "ot"], ["oltin", "ot"], ["kumush", "ot"], ["po'lat", "ot"], ["ko'mir", "ot"], ["iqlim", "ot"], ["kitob", "ot"], ["qalam", "ot"], ["ruchka", "ot"], ["ustoz", "ot"], ["bilim", "ot"], ["savol", "ot"], ["javob", "ot"], ["xabar", "ot"], ["ertak", "ot"], ["roman", "ot"], ["maqol", "ot"], ["lug'at", "ot"], ["hunar", "ot"], ["savdo", "ot"], ["sotuv", "ot"], ["xarid", "ot"], ["ombor", "ot"], ["do'kon", "ot"], ["kassa", "ot"], ["foyda", "ot"], ["zarar", "ot"], ["hisob", "ot"], ["raqam", "ot"], ["soliq", "ot"], ["tugma", "ot"], ["ekran", "ot"], ["robot", "ot"], ["radio", "ot"], ["kabel", "ot"], ["surat", "ot"], ["qo'shiq", "ot"], ["ashula", "ot"], ["medal", "ot"], ["kubok", "ot"], ["jamoa", "ot"], ["amaki", "ot"], ["jiyan", "ot"], ["kelin", "ot"], ["kuyov", "ot"], ["yigit", "ot"], ["inson", "ot"], ["qo'shni", "ot"], ["nikoh", "ot"], ["sovg'a", "ot"], ["hafta", "ot"], ["bugun", "ot"], ["hozir", "ot"], ["lahza", "ot"], ["tovush", "ot"], ["ohang", "ot"], ["sukut", "ot"], ["nafas", "ot"], ["dunyo", "ot"], ["vatan", "ot"], ["tarix", "ot"], ["qurol", "ot"], ["askar", "ot"], ["sevgi", "ot"], ["xayol", "ot"], ["g'azab", "ot"], ["g'urur", "ot"], ["qayg'u", "ot"], ["tuyg'u", "ot"], ["axloq", "ot"], ["hasad", "ot"], ["hayot", "ot"], ["iymon", "ot"], ["holat", "ot"], ["hosil", "ot"], ["hamma", "ot"], ["buyum", "ot"], ["belgi", "ot"], ["bilet", "ot"], ["bosim", "ot"], ["bemor", "ot"], ["tabib", "ot"], ["og'riq", "ot"], ["yo'tal", "ot"], ["dasta", "ot"], ["zavod", "ot"], ["ilova", "ot"], ["imkon", "ot"], ["ijara", "ot"], ["idora", "ot"], ["iroda", "ot"], ["ishora", "ot"], ["jumla", "ot"], ["javon", "ot"], ["makon", "ot"], ["manba", "ot"], ["meros", "ot"], ["misol", "ot"], ["mijoz", "ot"], ["mudir", "ot"], ["narsa", "ot"], ["niyat", "ot"], ["nusxa", "ot"], ["nomus", "ot"], ["oftob", "ot"], ["oqshom", "ot"], ["ozuqa", "ot"], ["panoh", "ot"], ["pilla", "ot"], ["peshin", "ot"], ["parik", "ot"], ["qaror", "ot"], ["qasam", "ot"], ["qator", "ot"], ["qavat", "ot"], ["qoida", "ot"], ["qolip", "ot"], ["qanot", "ot"], ["qayiq", "ot"], ["qoziq", "ot"], ["rayon", "ot"], ["rishta", "ot"], ["rutba", "ot"], ["raqib", "ot"], ["rejim", "ot"], ["safar", "ot"], ["sahro", "ot"], ["sezon", "ot"], ["sinov", "ot"], ["sovun", "ot"], ["sifat", "ot"], ["savob", "ot"], ["tavba", "ot"], ["taxta", "ot"], ["taraf", "ot"], ["tizim", "ot"], ["tomon", "ot"], ["tuhfa", "ot"], ["tanho", "ot"], ["taksi", "ot"], ["talab", "ot"], ["toqat", "ot"], ["tugun", "ot"], ["tuzum", "ot"], ["tuyoq", "ot"], ["yashin", "ot"], ["yetim", "ot"], ["yog'och", "ot"], ["yog'du", "ot"], ["quvur", "ot"], ["xodim", "ot"], ["voqea", "ot"], ["xotin", "ot"], ["yutuq", "ot"], ["zamon", "ot"], ["zahar", "ot"], ["zarra", "ot"], ["zamin", "ot"], ["bolta", "ot"], ["arava", "ot"], ["amlak", "ot"], ["doira", "ot"], ["dumba", "ot"], ["dalil", "ot"], ["ehson", "ot"], ["erkak", "ot"], ["firma", "ot"], ["guruh", "ot"], ["gunoh", "ot"], ["guvoh", "ot"], ["galla", "ot"], ["gavda", "ot"], ["hovuz", "ot"], ["hakam", "ot"], ["hujum", "ot"], ["huquq", "ot"], ["jahon", "ot"], ["kimyo", "ot"], ["kurash", "ot"], ["kamon", "ot"], ["lagan", "ot"], ["madad", "ot"], ["nazar", "ot"], ["nuqta", "ot"], ["nomer", "ot"], ["nasib", "ot"], ["ovqat", "ot"], ["paxta", "ot"], ["pochta", "ot"], ["poyga", "ot"], ["qadam", "ot"], ["rohat", "ot"], ["ramka", "ot"], ["rivoj", "ot"], ["sabab", "ot"], ["salom", "ot"], ["sahna", "ot"], ["sohil", "ot"], ["sirka", "ot"], ["sutka", "ot"], ["tikan", "ot"], ["tikuv", "ot"], ["tomchi", "ot"], ["tanga", "ot"], ["uslub", "ot"], ["undosh", "ot"], ["uchqun", "ot"], ["unvon", "ot"], ["vodiy", "ot"], ["vagon", "ot"], ["xorij", "ot"], ["xonim", "ot"], ["xohish", "ot"], ["xamir", "ot"], ["zirak", "ot"], ["ko'zgu", "ot"], ["ko'pik", "ot"], ["go'dak", "ot"], ["to'lov", "ot"], ["to'siq", "ot"], ["to'quv", "ot"], ["bo'ron", "ot"], ["bo'yoq", "ot"], ["bo'lim", "ot"], ["bo'lak", "ot"], ["so'rov", "ot"], ["chiroy", "ot"], ["chiqish", "ot"], ["chorak", "ot"], ["chaman", "ot"], ["chiqim", "ot"], ["chiziq", "ot"], ["chidam", "ot"], ["aqlli", "sifat"], ["butun", "sifat"], ["gulli", "sifat"], ["halol", "sifat"], ["jonli", "sifat"], ["kuchli", "sifat"], ["kasal", "sifat"], ["muhim", "sifat"], ["mayda", "sifat"], ["nurli", "sifat"], ["noyob", "sifat"], ["o'tkir", "sifat"], ["pishiq", "sifat"], ["pushti", "sifat"], ["qizil", "sifat"], ["qiyin", "sifat"], ["sariq", "sifat"], ["semiz", "sifat"], ["shirin", "sifat"], ["sovuq", "sifat"], ["ulkan", "sifat"], ["ustun", "sifat"], ["yaxshi", "sifat"], ["yomon", "sifat"], ["yangi", "sifat"], ["yashil", "sifat"], ["yopiq", "sifat"], ["yoriq", "sifat"], ["yozgi", "sifat"], ["yetuk", "sifat"], ["go'zal", "sifat"], ["chuqur", "sifat"], ["yaqin", "sifat"], ["sodda", "sifat"], ["turli", "sifat"], ["ruhiy", "sifat"], ["kuzgi", "sifat"], ["katta", "sifat"], ["kichik", "sifat"], ["qisqa", "sifat"], ["issiq", "sifat"], ["achchiq", "sifat"], ["totli", "sifat"], ["iflos", "sifat"], ["xunuk", "sifat"], ["keksa", "sifat"], ["to'liq", "sifat"], ["oddiy", "sifat"], ["tanish", "sifat"], ["qalin", "sifat"], ["yupqa", "sifat"], ["tuzli", "sifat"], ["quruq", "sifat"], ["arzon", "sifat"], ["zarur", "sifat"], ["sodiq", "sifat"], ["tirik", "sifat"], ["kerak", "sifat"], ["to'g'ri", "sifat"], ["tekis", "sifat"], ["avval", "ravish"], ["birga", "ravish"], ["doimo", "ravish"], ["tezda", "ravish"], ["sekin", "ravish"], ["hamon", "ravish"], ["qayta", "ravish"], ["keyin", "ravish"], ["tunda", "ravish"], ["boshqa", "olmosh"], ["qaysi", "olmosh"], ["qancha", "olmosh"], ["qachon", "olmosh"], ["qayer", "olmosh"], ["shular", "olmosh"], ["bular", "olmosh"], ["menga", "olmosh"], ["bizga", "olmosh"], ["sizni", "olmosh"], ["bunga", "olmosh"], ["shunga", "olmosh"], ["keldi", "fe'l"], ["bordi", "fe'l"], ["ketdi", "fe'l"], ["qildi", "fe'l"], ["ko'rdi", "fe'l"], ["yozdi", "fe'l"], ["aytdi", "fe'l"], ["berdi", "fe'l"], ["turdi", "fe'l"], ["sevdi", "fe'l"], ["gapir", "fe'l"], ["yugur", "fe'l"], ["tushun", "fe'l"], ["kuzat", "fe'l"], ["sakra", "fe'l"], ["boshla", "fe'l"], ["yutdi", "fe'l"], ["o'qidi", "fe'l"], ["bo'ldi", "fe'l"], ["to'ldi", "fe'l"], ["chiqdi", "fe'l"], ["kuldi", "fe'l"], ["yurdi", "fe'l"], ["yondi", "fe'l"], ["kirdi", "fe'l"], ["yopdi", "fe'l"], ["bosdi", "fe'l"], ["to'xta", "fe'l"], ["olmoq", "fe'l"], ["demoq", "fe'l"], ["yemoq", "fe'l"], ["ichmoq", "fe'l"], ["uchmoq", "fe'l"], ["ochmoq", "fe'l"], ["o'lmoq", "fe'l"], ["bildi", "fe'l"], ["kutdi", "fe'l"], ["sotdi", "fe'l"], ["qoldi", "fe'l"], ["sezdi", "fe'l"], ["tikdi", "fe'l"], ["bitta", "son"], ["beshta", "son"], ["ellik", "son"], ["yuzta", "son"], ["ikkov", "son"], ["yarim", "son"], ["bilan", "ko'makchi"], ["qadar", "ko'makchi"], ["sayin", "ko'makchi"], ["buyon", "ko'makchi"], ["lekin", "bog'lovchi"], ["chunki", "bog'lovchi"], ["garchi", "bog'lovchi"], ["balki", "bog'lovchi"], ["yoxud", "bog'lovchi"], ["hamda", "bog'lovchi"], ["biroq", "bog'lovchi"], ["hatto", "yuklama"], ["faqat", "yuklama"], ["xuddi", "yuklama"], ["nahot", "yuklama"], ["xolos", "yuklama"], ["badan", "ot"], ["bepul", "sifat"], ["beshik", "ot"], ["yetti", "son"], ["o'ttiz", "son"], ["bekor", "sifat"], ["mayli", "yuklama"], ["yig'in", "ot"], ["tilak", "ot"], ["albom", "ot"], ["arena", "ot"], ["ariza", "ot"], ["arqon", "ot"], ["arvoh", "ot"], ["arxiv", "ot"], ["balet", "ot"], ["banka", "ot"], ["beton", "ot"], ["bomba", "ot"], ["chodir", "ot"], ["chashma", "ot"], ["chorva", "ot"], ["dinor", "ot"], ["divan", "ot"], ["drama", "ot"], ["ferma", "ot"], ["filtr", "ot"], ["forum", "ot"], ["fokus", "ot"], ["gamma", "ot"], ["grant", "ot"], ["gramm", "ot"], ["hovuch", "ot"], ["kanal", "ot"], ["katak", "ot"], ["lager", "ot"], ["lazer", "ot"], ["lider", "ot"], ["linza", "ot"], ["lisey", "ot"], ["menyu", "ot"], ["metro", "ot"], ["minut", "ot"], ["modem", "ot"], ["modul", "ot"], ["oksid", "ot"], ["okean", "ot"], ["paket", "ot"], ["panel", "ot"], ["parcha", "ot"], ["parta", "ot"], ["poliz", "ot"], ["radar", "ot"], ["salon", "ot"], ["senat", "ot"], ["seans", "ot"], ["sport", "ot"], ["sxema", "ot"], ["teatr", "ot"], ["tonna", "ot"], ["tumor", "ot"], ["tumov", "ot"], ["vakil", "ot"], ["varaq", "ot"], ["video", "ot"], ["virus", "ot"], ["vokal", "ot"], ["yadro", "ot"], ["yevro", "ot"], ["saroy", "ot"], ["yotoq", "ot"], ["qog'oz", "ot"], ["quduq", "ot"], ["qovoq", "ot"], ["ko'mak", "ot"], ["to'fon", "ot"], ["qafas", "ot"], ["qimor", "ot"], ["oshpaz", "ot"], ["sovchi", "ot"], ["yumush", "ot"], ["qalay", "ot"], ["saqich", "ot"], ["po'choq", "ot"], ["tokcha", "ot"], ["yarog'", "ot"], ["yakun", "ot"], ["paxsa", "ot"], ["pufak", "ot"], ["g'azal", "ot"], ["g'ilof", "ot"], ["g'aram", "ot"], ["xatar", "ot"], ["yeyish", "ot"], ["xasta", "sifat"], ["xarob", "sifat"], ["tiniq", "sifat"], ["taniq", "sifat"], ["siniq", "sifat"], ["tuzuk", "sifat"], ["zukko", "sifat"], ["xolis", "sifat"], ["ozoda", "sifat"], ["oppoq", "sifat"], ["g'arib", "sifat"], ["uyg'oq", "sifat"], ["yaroq", "sifat"], ["yakka", "sifat"], ["qo'pol", "sifat"], ["ochko'z", "sifat"], ["sayoz", "sifat"], ["zolim", "sifat"]], "allowed": ["abgor", "ablah", "abxaz", "adibi", "adosi", "adras", "afg'on", "afsus", "ag'dar", "agent", "agrar", "ahloq", "aholi", "ahvol", "ahyon", "ajali", "ajdar", "ajdod", "ajina", "ajrab", "ajrat", "ajrim", "akaga", "akang", "akasi", "aksar", "aktiv", "alban", "aldab", "aldash", "aldov", "alkan", "almash", "aloqa", "amali", "amiri", "amper", "anana", "anavi", "anons", "aprel", "aqida", "aqlga", "aqlim", "aqliy", "aqlni", "arbob", "arman", "armon", "arog'i", "asali", "asari", "asbob", "asosi", "asrab", "asrash", "asrda", "asrga", "asriy", "astma", "atadi", "atama", "atiga", "atigi", "atlas", "atomi", "atrof", "audio", "avjga", "avlod", "avzal", "axlat", "aybim", "aybni", "aylab", "aynan", "ayoli", "ayrim", "aytar", "aytay", "aytib", "aytish", "aytma", "aytsa", "ayyor", "azobi", "bag'ri", "baham", "bahra", "bahsu", "bajar", "balga", "balli", "bandi", "banki", "banku", "baqir", "barcha", "bargi", "barni", "barot", "barpo", "baxil", "baxti", "bayon", "bayti", "bazo'r", "beayb", "bebosh", "bedil", "behis", "behush", "bejiz", "bekit", "belda", "belga", "belni", "berar", "beray", "berib", "berish", "berma", "bersa", "beshda", "beshga", "beshni", "betga", "betli", "betni", "betob", "bezab", "bezak", "bezat", "bezib", "bezor", "bichish", "bigiz", "bilar", "bilay", "bilib", "bilish", "bilsa", "binar", "biram", "birda", "birin", "birma", "birni", "biron", "biror", "birov", "biroz", "bitar", "bitga", "bitim", "bitir", "bitli", "bizda", "bizni", "bloki", "blyuz", "bo'g'ib", "bo'g'im", "bo'g'in", "bo'g'ish", "bo'lar", "bo'lib", "bo'lish", "bo'lsa", "bo'lur", "bo'pti", "bo'qoq", "bo'shab", "bo'shash", "bo'shat", "bo'yab", "bo'yash", "bo'yim", "bo'yra", "bobom", "bog'cha", "bog'da", "bog'ga", "bog'im", "bog'la", "bog'li", "bog'ni", "boisi", "bolam", "bolg'a", "boqar", "boqish", "borar", "boray", "borga", "borib", "borish", "borki", "bormi", "borsa", "bosar", "boshda", "boshga", "boshim", "boshli", "boshni", "bosib", "bosish", "bosma", "bossa", "bosti", "botar", "botdi", "botib", "botish", "boyib", "boyish", "bug'ni", "bukib", "buncha", "bunda", "burab", "burchi", "burda", "burdi", "burib", "buril", "burish", "burni", "busiz", "buyuk", "buyur", "buzdi", "buzib", "buzish", "buzma", "buzsa", "buzuq", "chakki", "chalib", "chanoq", "chapda", "chapga", "chaqir", "chaqish", "charxi", "chatda", "chayen", "chechen", "chehra", "chekdi", "chekib", "chekish", "chekka", "chekli", "chetda", "chetel", "chetga", "chevar", "chexcha", "chidab", "chiday", "chigit", "chimcha", "chinmi", "chinni", "chinoz", "chipta", "chiqar", "chiqib", "chiqsa", "chirib", "chizib", "chizish", "chizma", "cho'chib", "cho'kdi", "cho'kib", "cho'kish", "cho'lda", "cho'mib", "cho'pon", "cho'qqi", "cho'zdi", "cho'zib", "cho'zish", "chog'da", "chog'li", "cholg'u", "chopar", "chopdi", "chopib", "chopiq", "chopish", "choyga", "churib", "dadil", "dag'al", "damda", "darak", "dardi", "darsi", "dashtu", "davom", "davon", "davra", "davri", "daxli", "daydi", "debdi", "dedik", "dedim", "degan", "degim", "dekan", "demak", "demas", "demay", "derdi", "desak", "desam", "devol", "devon", "deydi", "deyish", "dilda", "dilga", "dilni", "dimog'", "dinda", "dinga", "dinim", "diniy", "dinni", "dipol", "diski", "disko", "do'sti", "dog'da", "dohiy", "domat", "domla", "dong'i", "donish", "donor", "dovul", "duchor", "durra", "dyuym", "edikb", "ediki", "edimi", "eding", "egami", "egasi", "ekadi", "ekani", "ekila", "ekishi", "ekkan", "eldan", "ellar", "eltib", "emadi", "emasu", "emlash", "enaga", "eniga", "enini", "enlik", "eplab", "eplay", "eposi", "ergash", "eriga", "erini", "erisha", "erishi", "erita", "erkin", "erkka", "esada", "esadi", "esdan", "eshigi", "esini", "eslab", "eslar", "eslash", "eslay", "etadi", "etdik", "etdim", "etgach", "etgan", "etigi", "etika", "etila", "eting", "etishi", "etmas", "etmash", "etmay", "etnik", "fakti", "falaj", "falak", "falon", "fanda", "fanga", "fanni", "faoli", "faraz", "farqi", "fasli", "fatvo", "fayli", "fikri", "fikru", "filda", "filga", "filmi", "filni", "fincha", "firqa", "fitna", "fizik", "floti", "foizi", "fojia", "fonda", "fondi", "foniy", "fonni", "foton", "front", "funti", "g'aliz", "g'alla", "g'amga", "g'amli", "g'avg'o", "g'ayri", "g'olib", "g'oyat", "g'oyib", "g'ozga", "g'ozni", "galda", "galgi", "gapda", "gapga", "gapni", "garaj", "garov", "gayka", "gazni", "gerbi", "gimni", "giyoh", "go'rga", "go'shti", "golda", "gotik", "granj", "gulda", "gulga", "gulni", "gumon", "gurji", "hadeb", "hadik", "hadis", "hadya", "hafiz", "hajga", "hajmi", "halok", "halqa", "handa", "hanuz", "haqda", "haqli", "haqmi", "haqni", "haqqi", "harfi", "harid", "harom", "hashar", "hassa", "hatti", "havas", "hayat", "hayit", "hazil", "hijob", "hilof", "hissa", "hisse", "hofiz", "hojat", "hokim", "holda", "holga", "holni", "holos", "homiy", "huddi", "hudud", "hujra", "hukmi", "huruj", "huzur", "iblis", "ibora", "ibrat", "ichdan", "ichdim", "ichgan", "ichida", "ichiga", "ichini", "ichmay", "iddao", "ideal", "idrok", "ifoda", "ijodi", "ildam", "ilg'ab", "ilg'or", "ilgan", "ilgich", "ilinch", "ilinj", "illat", "ilmas", "ilmga", "ilmiy", "ilmni", "iloji", "imidj", "imomi", "indin", "inert", "ingush", "inkor", "insof", "ionga", "ionni", "iqbol", "iqror", "isbot", "ishchan", "ishdan", "ishdir", "ishg'ol", "ishida", "ishiga", "ishini", "ishlab", "ishlar", "ishlash", "ishlay", "ishlov", "ishonch", "ishqim", "ishqiy", "ishsiz", "isini", "isishi", "isloh", "islom", "ismga", "ismim", "ismli", "ismni", "isnod", "ispan", "istab", "istak", "istar", "isyon", "itdan", "itlar", "itoat", "ixcham", "ixlos", "izchil", "izdan", "izhor", "iziga", "izini", "izlab", "izlar", "izlash", "izlay", "izohi", "izsiz", "izzat", "jabha", "jadal", "jadid", "jahli", "jajji", "jamol", "jangi", "jangu", "janob", "janri", "janub", "jasad", "jersi", "jeton", "jihod", "jihoz", "jildi", "jinni", "jinsi", "jo'nab", "jo'nat", "johil", "jonga", "jonim", "jonon", "joriy", "josus", "joyda", "joyga", "joyim", "joyni", "jufti", "juvon", "kalla", "kalta", "kamda", "kamol", "karat", "karra", "karta", "kasbi", "kashta", "kasod", "kavak", "kechar", "kechda", "kechdi", "kechga", "kechib", "kechir", "kechish", "kechki", "kechmi", "kechni", "kechsa", "kelar", "kelib", "kelish", "kelsa", "kemir", "kenja", "keshda", "keshga", "keshni", "kesib", "kesil", "kesim", "kesish", "ketar", "ketib", "ketish", "ketma", "ketsa", "kezib", "kimda", "kimga", "kimki", "kimni", "kimsa", "kirar", "kirib", "kiril", "kirim", "kirish", "kirit", "kirsa", "kishan", "kiyib", "kiyish", "klipi", "klubi", "ko'chat", "ko'chdi", "ko'chib", "ko'chir", "ko'chish", "ko'chma", "ko'hna", "ko'kda", "ko'kish", "ko'kka", "ko'lda", "ko'lga", "ko'lla", "ko'lni", "ko'mish", "ko'nar", "ko'pda", "ko'pmi", "ko'pni", "ko'rar", "ko'ray", "ko'rib", "ko'rik", "ko'rish", "ko'rma", "ko'rmi", "ko'rsa", "ko'tar", "ko'zda", "ko'zga", "ko'zim", "ko'zla", "ko'zli", "ko'zni", "kodga", "kodni", "kokil", "kokos", "konda", "koral", "kotib", "kuchda", "kuchga", "kuchim", "kuchni", "kulba", "kulga", "kulgi", "kulgu", "kulib", "kulol", "kunda", "kunga", "kunim", "kunki", "kunni", "kurak", "kurka", "kutar", "kutib", "kutish", "kutsa", "kuyda", "kuydi", "kuyga", "kuyib", "kuyish", "kuyla", "kuzda", "kuzga", "kuzni", "kuzov", "kvant", "kvota", "labda", "labga", "labli", "labni", "lahja", "lalmi", "laqab", "latif", "latta", "lavha", "lenta", "libos", "lifti", "lo'nda", "lokal", "lotin", "loyga", "loyiq", "loyqa", "lozim", "malla", "malol", "mangu", "maoshi", "maqom", "marka", "maroq", "marta", "maska", "matni", "mavzu", "mayga", "mayib", "mayin", "mayni", "mayor", "mazut", "media", "mehri", "menda", "menmi", "metan", "metri", "mezon", "midda", "milod", "mingi", "minib", "minus", "mishni", "misli", "misra", "mitti", "mixga", "mo'may", "modal", "modda", "model", "mohir", "molni", "momiq", "mosla", "motam", "moviy", "movut", "moyil", "mozor", "muchal", "muhit", "muhri", "mulki", "mullo", "muncha", "muqim", "muzey", "nafar", "nafis", "nafsi", "nagma", "narxi", "narxu", "nashri", "nasli", "navli", "nayga", "nayza", "nechta", "nefti", "nemis", "nigoh", "nimam", "niqob", "nishon", "nizom", "nobud", "nochor", "nodon", "nohaq", "nolga", "nolish", "noliy", "nomga", "nomli", "nomni", "nonda", "nonga", "nonni", "nopok", "nosoz", "noxush", "nozik", "nufuz", "nuqul", "nutqi", "o'chmas", "o'chog'i", "o'g'lim", "o'g'lon", "o'ladi", "o'lchab", "o'lcham", "o'lchash", "o'lchov", "o'ldim", "o'lgach", "o'lgan", "o'limi", "o'lmas", "o'lmay", "o'nbesh", "o'nbir", "o'ndan", "o'ngda", "o'ngga", "o'nlab", "o'nlar", "o'nlik", "o'qdan", "o'qing", "o'qisa", "o'qishi", "o'qlar", "o'rang", "o'rgan", "o'rimi", "o'rnak", "o'rtoq", "o'rxun", "o'sadi", "o'sgan", "o'shlik", "o'sishi", "o'smir", "o'tadi", "o'tashi", "o'tdik", "o'tdim", "o'tgach", "o'tgan", "o'ting", "o'tishi", "o'tkaz", "o'tloq", "o'tmas", "o'tmay", "o'tmish", "o'tnat", "o'tsak", "o'tsam", "o'tsin", "o'xshab", "o'xshash", "o'ydim", "o'yini", "o'ylab", "o'ylar", "o'ylash", "o'ynab", "o'ynar", "o'ynash", "o'ynay", "o'zagi", "o'zaro", "o'zbek", "o'zgar", "o'zicha", "o'zida", "o'ziga", "o'zing", "o'zini", "o'zlik", "obida", "obraz", "obuna", "ochadi", "ochdan", "ochdik", "ochgan", "ochila", "oching", "ochishi", "ochlar", "ochlik", "ochmas", "odami", "ofisi", "og'asi", "og'rib", "og'rish", "oilam", "oktan", "oladi", "olami", "oldik", "oldim", "oldin", "olgach", "olgan", "olgim", "olima", "olimi", "olina", "oling", "olishi", "olloh", "olmas", "olmash", "olmay", "olmon", "olmos", "olqish", "olsak", "olsam", "olsin", "omadi", "omili", "onang", "onasi", "ongli", "ongni", "opang", "opani", "opasi", "opera", "optik", "oqadi", "oqimi", "oqlab", "oqlash", "oqlay", "oqlov", "oqsash", "oqsoq", "orada", "orani", "orasi", "orden", "order", "organ", "oroli", "ortar", "ortda", "ortdi", "ortga", "ortib", "ortiq", "ortish", "oshadi", "oshgan", "oshig'i", "oshira", "oshishi", "oshkor", "oshmas", "oshmay", "osoni", "otada", "otadi", "otang", "otasi", "otdan", "otdik", "otgan", "otiga", "otila", "otishi", "otlar", "otmas", "otmay", "oviga", "ovini", "ovlab", "ovora", "ovozi", "ovuli", "oxiri", "oydan", "oydek", "oydin", "oydir", "oyida", "oyiga", "oylab", "oylar", "oylik", "oyog'i", "ozgan", "ozroq", "pachoq", "panda", "parki", "pasti", "patda", "payda", "paydo", "payti", "pechka", "pichan", "piket", "pishib", "plyus", "podsho", "pogon", "polga", "polni", "porox", "porti", "posti", "pulda", "pulga", "pulim", "pulmi", "pulni", "punkt", "putur", "puxta", "pyesa", "qabri", "qabul", "qaday", "qaddi", "qadim", "qadoq", "qadri", "qalbi", "qamab", "qamash", "qamoq", "qarab", "qaram", "qarar", "qarash", "qarat", "qaray", "qarib", "qarich", "qarshi", "qarta", "qarzi", "qasos", "qasri", "qavoq", "qayda", "qayga", "qayin", "qazib", "qazish", "qidir", "qilar", "qilay", "qilib", "qilich", "qiliq", "qilish", "qilma", "qilsa", "qirib", "qirol", "qirra", "qishda", "qishga", "qishki", "qishni", "qisib", "qisiq", "qisish", "qismi", "qissa", "qiyna", "qiyom", "qizcha", "qizda", "qizga", "qizib", "qizim", "qiziq", "qizni", "qo'lda", "qo'lga", "qo'lim", "qo'lla", "qo'lni", "qo'nim", "qo'nish", "qo'riq", "qo'shdi", "qo'shib", "qo'shil", "qo'shin", "qo'shish", "qo'shma", "qo'shsa", "qo'shsha", "qo'ton", "qo'yar", "qo'yay", "qo'ydi", "qo'yib", "qo'yish", "qo'yma", "qo'ysa", "qobil", "qobiq", "qochdi", "qochib", "qochish", "qochoq", "qodir", "qolar", "qolay", "qolib", "qolish", "qoloq", "qolsa", "qomus", "qonga", "qonli", "qonun", "qopga", "qopib", "qopish", "qopla", "qoqdi", "qoqib", "qorda", "qorga", "qorli", "qorni", "qoshda", "qoshga", "qoshni", "qotib", "qotil", "qotir", "qoyil", "qozoq", "quchoq", "qulab", "qulay", "qulga", "quloch", "qulub", "quray", "qurbi", "qurib", "qurish", "qurit", "qursa", "quvdi", "quvib", "quvish", "quyib", "quyish", "quyuq", "raisi", "ramzi", "randa", "rangi", "rasmi", "rasta", "ravish", "ravon", "reket", "rioya", "ro'yob", "rolli", "rolni", "roppa", "rotor", "rubli", "rubob", "ruhan", "ruhda", "rukni", "rumin", "ruscha", "rusum", "saboq", "sadaf", "safda", "safga", "sajda", "salla", "salsa", "samba", "sanab", "sanash", "saqla", "sarob", "sarpo", "sathi", "satri", "savod", "saxiy", "sayti", "sehri", "senga", "sepish", "sevar", "sevib", "sevish", "sevsa", "sezgi", "sezib", "sezish", "sezsa", "shahid", "shahri", "shakli", "shaklu", "shanba", "sharaf", "sharhi", "sharob", "sharti", "shaxsi", "shayba", "sherik", "shifer", "shimda", "shimim", "shimol", "shiori", "shishib", "shkala", "shohid", "shoira", "shoiri", "shoiru", "shonli", "shoshib", "shoshma", "shouda", "shouni", "shrift", "shtati", "shubha", "shudir", "shugun", "shukur", "shuncha", "shunda", "shusiz", "sig'im", "sinab", "sinash", "sindi", "sinfi", "sinib", "sinus", "siqib", "siquv", "sirim", "sirki", "sirli", "sirni", "sitqi", "siyib", "siymo", "siyoh", "siyqa", "sizda", "sizga", "slayd", "smeta", "so'kib", "so'kish", "so'kma", "so'lchi", "so'lib", "so'lim", "so'mcha", "so'mga", "so'mni", "so'nib", "so'nish", "so'rab", "so'rash", "so'ray", "so'roq", "so'yib", "so'yla", "so'zda", "so'zga", "so'zim", "so'zla", "so'zni", "soati", "sobiq", "sochda", "sochga", "sochib", "sochin", "sochiq", "sochli", "sochni", "sodir", "sog'ib", "sohib", "sokin", "solar", "soldi", "solib", "solish", "solsa", "somon", "sonda", "songa", "sonli", "sonni", "soqit", "sotib", "sotiq", "sotish", "sotsa", "sovet", "sovib", "soxta", "spini", "spirt", "stend", "stoli", "sudda", "sudga", "sudni", "sudya", "suqdi", "surar", "surdi", "surib", "surish", "sursa", "sutni", "suvda", "suvga", "suvni", "suyuq", "suzib", "suzoq", "tafti", "talash", "talay", "tamg'a", "tamom", "tango", "tanib", "taniy", "tanti", "taomi", "taqar", "taqib", "taqiq", "taqir", "taqish", "tarzi", "tashib", "tashish", "tashqi", "tasma", "tatar", "tatib", "taxti", "tayach", "taycha", "tayin", "tayoq", "tegdi", "tegib", "tegish", "tegma", "tegsa", "tejab", "tejash", "tekin", "telba", "tengi", "tepdi", "tepib", "tepki", "teran", "terib", "terim", "terish", "terma", "teshdi", "teshib", "teshik", "tig'iz", "tikib", "tikish", "tikka", "tikla", "tilab", "tilay", "tilchi", "tilda", "tilga", "tilla", "tilli", "tilmi", "tilni", "tinchi", "tiraj", "tishda", "tishga", "tishni", "tivit", "tiyib", "tiyin", "tiyish", "to'g'on", "to'kar", "to'kib", "to'kin", "to'kish", "to'lab", "to'lar", "to'lash", "to'lay", "to'lib", "to'nga", "to'nka", "to'nni", "to'pni", "to'qib", "to'qish", "to'qiz", "to'rni", "to'rva", "to'shak", "to'sib", "to'sish", "to'ychi", "to'yda", "to'yga", "to'yib", "to'zib", "tobut", "tog'da", "tog'ga", "tog'li", "tog'ni", "toifa", "tojik", "tojir", "tolib", "tomga", "tomli", "tomni", "tomog'", "topar", "topdi", "topib", "topish", "topsa", "toroj", "torta", "toshga", "toshib", "toshni", "totuv", "tovar", "tug'di", "tug'ib", "tug'ma", "tugab", "tugan", "tugar", "tugash", "tunab", "tunash", "tunga", "tungi", "tunni", "tuppa", "turar", "turfa", "turga", "turib", "turish", "turma", "turna", "turqi", "tursa", "tusda", "tusga", "tushar", "tushdi", "tushga", "tushib", "tushish", "tutar", "tutash", "tutdi", "tutib", "tutish", "tutun", "tuzar", "tuzat", "tuzda", "tuzdi", "tuzga", "tuzib", "tuzish", "tuzni", "tuzoq", "tuzsa", "tuzuq", "uchala", "uchdan", "uchdim", "uchida", "uchog'i", "uchqich", "uchrab", "uchrash", "uchray", "ukani", "ukasi", "ulamo", "ulushi", "umidi", "ummon", "umrim", "unaqa", "undan", "undash", "unday", "undov", "uning", "unini", "unsiz", "unsur", "uradi", "urchib", "urchish", "urdik", "urfga", "urgan", "urina", "urishi", "ursin", "urug'i", "urushi", "ushlab", "ushlash", "ushlay", "ustki", "usuli", "uxlab", "uxlash", "uyali", "uydan", "uyg'ot", "uyg'un", "uyg'ur", "uyida", "uyiga", "uyini", "uylar", "uyog'i", "uysiz", "uzgan", "uzishi", "uzog'i", "uzsak", "uzuna", "uzviy", "vafot", "vahiy", "vaqti", "vasat", "vazir", "vazni", "vengr", "vilka", "voizi", "voris", "vujud", "vzvod", "xalqi", "xashak", "xatda", "xatga", "xatni", "xatti", "xavfi", "xazon", "xilda", "xilga", "xilma", "xilof", "xitob", "xo'rak", "xolam", "xolda", "xolga", "xolli", "xonam", "xonga", "xossa", "xushni", "yalpi", "yamab", "yamash", "yapon", "yarar", "yarmi", "yasab", "yasash", "yashab", "yashar", "yashash", "yashay", "yaxna", "yechib", "yechim", "yechish", "yedik", "yedim", "yegan", "yelim", "yelpi", "yemay", "yerda", "yerga", "yerim", "yerli", "yerni", "yetar", "yetay", "yetdi", "yetib", "yetish", "yetsa", "yig'ib", "yig'im", "yig'ish", "yig'la", "yilcha", "yilda", "yilga", "yilgi", "yilni", "yiqil", "yirik", "yiroq", "yo'g'on", "yo'lchi", "yo'lda", "yo'lga", "yo'lni", "yo'qki", "yo'qmi", "yo'qol", "yo'qqa", "yo'riq", "yodda", "yodga", "yodli", "yodni", "yog'da", "yog'di", "yog'ga", "yog'ib", "yog'im", "yog'in", "yog'li", "yog'ni", "yog'sa", "yohud", "yonib", "yonma", "yonuv", "yopib", "yopish", "yoqar", "yoqdi", "yoqib", "yoqish", "yoqsa", "yoqut", "yorib", "yorim", "yorish", "yorug'", "yoshar", "yoshda", "yoshga", "yoshim", "yoshli", "yoshni", "yotar", "yotib", "yotish", "yotsa", "yovuz", "yoyish", "yozar", "yozda", "yozga", "yozib", "yozish", "yozma", "yozni", "yozsa", "yozuv", "yukni", "yulib", "yumdi", "yumib", "yunon", "yuqish", "yurar", "yurib", "yurish", "yurma", "yurti", "yutar", "yutib", "yutug'", "yuvar", "yuvib", "yuvosh", "yuzga", "yuzli", "yuzma", "yuzni", "zabon", "zag'cha", "zakot", "zalda", "zalga", "zalni", "zarba", "zehni", "zig'ir", "zikri", "zilol", "ziyod", "ziyon", "zo'rg'a", "zobit", "zombi", "zorim", "zotli", "zug'um", "zulmi", "ahmoq"]};
+const ANSWERS = DICT.answers;
+const VALID = new Set(ANSWERS.map(a => a[0]).concat(DICT.allowed));
+
+/* 7 liga, har biri 3 daraja. `end` liga tugaydigan umumiy ball. Gold'dan boshlab yutqazganda `pen` ball ayriladi. */
+const LEAGUES = [
+  { name: "Wood",     end: 30,   pen: 0, tiers: ["Oak", "Walnut", "Ebony"],           color: "var(--r-wood)" },
+  { name: "Bronze",   end: 80,   pen: 0, tiers: ["Cast", "Forged", "Polished"],       color: "var(--r-bronze)" },
+  { name: "Silver",   end: 160,  pen: 0, tiers: ["800", "Sterling 925", "Fine 999"],  color: "var(--r-silver)" },
+  { name: "Gold",     end: 280,  pen: 1, tiers: ["14K", "18K", "24K"],                color: "var(--r-gold)" },
+  { name: "Platinum", end: 450,  pen: 2, tiers: ["850", "900", "950"],                color: "var(--r-platinum)" },
+  { name: "Diamond",  end: 700,  pen: 3, tiers: ["Rough", "Cut", "Brilliant"],        color: "var(--r-diamond)" },
+  { name: "Crown",    end: 1000, pen: 4, tiers: ["Prince", "King", "Emperor"],        color: "var(--r-crown)" }
+];
+const TIERS = [];
+(function () {
+  let start = 0;
+  LEAGUES.forEach(L => {
+    const size = L.end - start;
+    for (let k = 0; k < 3; k++) {
+      TIERS.push({ league: L, name: L.tiers[k], from: start + Math.round(size * k / 3), to: k === 2 ? L.end : start + Math.round(size * (k + 1) / 3) });
+    }
+    start = L.end;
+  });
+})();
+function tierIndex(p) { let idx = 0; TIERS.forEach((t, i) => { if (p >= t.from) idx = i; }); return idx; }
+const leagueIdx = p => LEAGUES.indexOf(TIERS[tierIndex(p)].league);
+const tierLabel = t => t.league.name + " · " + t.name;
+const RANKED_CLOSES_AT = 3;   /* Gold ligasi */
+
+const LEN = 5;
+const KB_ROWS = [
+  ["q","e","r","t","y","u","i","o","p","o'"],
+  ["a","s","d","f","g","h","j","k","l","g'"],
+  ["ENTER","z","x","v","b","n","m","sh","ch","BACK"]
+];
+const SINGLES = new Set(KB_ROWS.flat().filter(k => k !== "ENTER" && k !== "BACK"));
+const tokenize = w => w.match(/sh|ch|o'|g'|./g) || [];
+/* So'zlar ichkarida eski imloda (sh, ch, o', g') saqlanadi; ekranda tanlangan alifboga qarab ko'rsatiladi.
+   Yangi alifbo (2026): sh→ş, ch→ç, o'→ö, g'→ğ. */
+let alpha = "new";
+const NEW_LETTER = { "sh": "\u015F", "ch": "\u00E7", "o'": "\u00F6", "g'": "\u011F" };
+const FROM_NEW = { "\u015F": "sh", "\u00E7": "ch", "\u00F6": "o'", "\u011F": "g'" };
+const label = t => ((alpha === "new" && NEW_LETTER[t]) ? NEW_LETTER[t] : t).toUpperCase();
+const $ = id => document.getElementById(id);
+
+/* ---- toza yordamchi funksiyalar ---- */
+function evaluate(guess, ans) {
+  const res = Array(LEN).fill("off");
+  const left = {};
+  for (let i = 0; i < LEN; i++) {
+    if (guess[i] === ans[i]) res[i] = "ok";
+    else left[ans[i]] = (left[ans[i]] || 0) + 1;
+  }
+  for (let i = 0; i < LEN; i++) {
+    if (res[i] !== "ok" && left[guess[i]] > 0) { res[i] = "warn"; left[guess[i]]--; }
+  }
+  return res;
+}
+function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+/* a boshqasidan yaxshimi: 1 yutdi, 0 durang, -1 yutqazdi */
+function cmpMatch(a, b) {
+  if (a.solved && !b.solved) return 1;
+  if (!a.solved && b.solved) return -1;
+  if (!a.solved && !b.solved) return 0;
+  if (a.tries !== b.tries) return a.tries < b.tries ? 1 : -1;
+  if (Math.abs(a.ms - b.ms) < 1000) return 0;
+  return a.ms < b.ms ? 1 : -1;
+}
+/* navbatdagi o'yinchilardan juftlarni ajratadi: bir xil `b` (liga) va juft/toq o'rin bo'yicha */
+function pairFor(peers, bracket) {
+  const q = peers
+    .filter(p => p.kind === "viewer" && (!p.isMe || p.sameTab) && p.presence && p.presence.q && p.presence.q.b === bracket)
+    .sort((a, b) => (a.presence.q.ts - b.presence.q.ts) || (a.peer < b.peer ? -1 : 1));
+  const i = q.findIndex(p => p.isMe && p.sameTab);
+  if (i < 0) return null;
+  const partner = q[i % 2 === 0 ? i + 1 : i - 1];
+  return partner ? { me: q[i], partner } : null;
+}
+function roomSafe(s) { return String(s).toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16); }
+const timeLeftText = ms => { const m = Math.max(0, Math.ceil(ms / 60000)); return Math.floor(m / 60) + " soat " + (m % 60) + " daqiqa"; };
+
+/* ---- saqlash (faqat shu qurilmadagi qulaylik; bo'sh bo'lsa ham o'yin ishlaydi) ---- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let points = Math.max(0, Number(store.get("sozle.points", 0)) || 0);
+let stats = store.get("sozle.stats", { played: 0, won: 0 });
+if (!stats || typeof stats.played !== "number") stats = { played: 0, won: 0 };
+let reached = store.get("sozle.reached", null);
+if (!Array.isArray(reached)) { reached = []; for (let i = 0; i <= tierIndex(points); i++) reached.push(i); }
+let hints = Math.max(0, Number(store.get("sozle.hints", 2)) || 0);
+let hintAt = Number(store.get("sozle.hintAt", 0)) || Date.now();
+let nick = store.get("sozle.nick", "") || "";
+let settings = Object.assign({ sound: true, anim: true }, store.get("sozle.settings", {}));
+alpha = store.get("sozle.alpha", "new") === "old" ? "old" : "new";
+const HINT_REFILL_MS = 24 * 3600 * 1000;
+const HINT_REFILL_CAP = 3;
+
+function persist() {
+  store.set("sozle.points", points); store.set("sozle.stats", stats); store.set("sozle.reached", reached);
+  store.set("sozle.hints", hints); store.set("sozle.hintAt", hintAt);
+}
+/* har 24 soatda 1 ta bepul harf ochish maslahati (zaxira 3 tagacha) */
+function refillHints() {
+  const now = Date.now();
+  if (now - hintAt >= HINT_REFILL_MS) {
+    if (hints < HINT_REFILL_CAP) hints++;
+    hintAt = now;
+    persist();
+  }
+}
+
+/* ---- ovoz va animatsiya sozlamalari ---- */
+let actx = null;
+function tone(freq, dur, type, vol, delay) {
+  if (!settings.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
+    const t0 = actx.currentTime + (delay || 0);
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type || "sine"; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol || 0.06, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t0); o.stop(t0 + dur + 0.02);
+  } catch (e) {}
+}
+const sfx = {
+  key() { tone(520, 0.05, "triangle", 0.05); },
+  del() { tone(330, 0.05, "triangle", 0.04); },
+  flip(i) { tone(280 + i * 70, 0.09, "sine", 0.06, i * 0.11); },
+  bad() { tone(160, 0.18, "sawtooth", 0.05); },
+  win() { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.18, "triangle", 0.07, i * 0.1)); },
+  lose() { [330, 262, 196].forEach((f, i) => tone(f, 0.22, "sine", 0.06, i * 0.14)); },
+  tick() { tone(700, 0.08, "square", 0.04); }
+};
+function applySettings() {
+  document.documentElement.classList.toggle("noanim", !settings.anim);
+  $("swSound").setAttribute("aria-checked", String(settings.sound));
+  $("swAnim").setAttribute("aria-checked", String(settings.anim));
+}
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+/* ---- liga foni: har liga uchun o'z manzarasi ---- */
+function rng(seed) { let s = seed >>> 0; return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; }
+const f1 = n => Math.round(n * 10) / 10;
+function sceneSvg(li) {
+  const R = rng(li * 7919 + 13);
+  let defs = "", body = "";
+  const grad = (id, stops, vertical) => '<linearGradient id="' + id + '" x1="0" y1="0" x2="' + (vertical === false ? 1 : 0) + '" y2="' + (vertical === false ? 0 : 1) + '">' + stops.map(s => '<stop offset="' + s[0] + '" stop-color="' + s[1] + '"/>').join("") + "</linearGradient>";
+  const radial = (id, c, o) => '<radialGradient id="' + id + '"><stop offset="0" stop-color="' + c + '" stop-opacity="' + o + '"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></radialGradient>';
+  const stars = (n, ymax, col) => { let s = ""; for (let i = 0; i < n; i++) s += '<circle cx="' + f1(R() * 800) + '" cy="' + f1(R() * ymax) + '" r="' + f1(0.6 + R() * 1.4) + '" fill="' + col + '" opacity="' + f1(0.4 + R() * 0.6) + '"/>'; return s; };
+  const ridge = (baseY, amp, col, step) => { let p = "0,600 0," + baseY; for (let x = 0; x <= 800; x += step) p += " " + x + "," + f1(baseY - R() * amp); return '<polygon points="' + p + ' 800,' + baseY + ' 800,600" fill="' + col + '"/>'; };
+  const sparkle = (x, y, r, col) => '<polygon points="' + x + "," + (y - r) + " " + f1(x + r * 0.22) + "," + f1(y - r * 0.22) + " " + (x + r) + "," + y + " " + f1(x + r * 0.22) + "," + f1(y + r * 0.22) + " " + x + "," + (y + r) + " " + f1(x - r * 0.22) + "," + f1(y + r * 0.22) + " " + (x - r) + "," + y + " " + f1(x - r * 0.22) + "," + f1(y - r * 0.22) + '" fill="' + col + '"/>';
+  if (li === 0) { /* Wood: o'rmon */
+    defs = grad("sk", [[0, "#cfe9c9"], [1, "#78b083"]]);
+    body = '<rect width="800" height="600" fill="url(#sk)"/><circle cx="640" cy="110" r="80" fill="#fff6c8" opacity=".6"/>';
+    [["#5c9a68", 330, 90, 80], ["#3f7a4c", 420, 120, 105], ["#264f35", 520, 150, 135]].forEach(L => {
+      let x = -20;
+      while (x < 840) {
+        const h = L[3] * (0.8 + R() * 0.5), w = L[2] * 0.42 * (0.85 + R() * 0.3), y = L[1] + R() * 25;
+        body += '<rect x="' + f1(x - 4) + '" y="' + y + '" width="8" height="' + f1(h * 0.3) + '" fill="#4a3322"/>';
+        for (let t = 0; t < 3; t++) body += '<polygon points="' + f1(x) + "," + f1(y - h + t * h * 0.27) + " " + f1(x - w * (0.55 + t * 0.25)) + "," + f1(y - h * 0.1 - (2 - t) * h * 0.05 + t * 2) + " " + f1(x + w * (0.55 + t * 0.25)) + "," + f1(y - h * 0.1 - (2 - t) * h * 0.05 + t * 2) + '" fill="' + L[0] + '"/>';
+        x += L[2] * (0.55 + R() * 0.35);
+      }
+    });
+    body += '<rect y="540" width="800" height="60" fill="#1d3a29"/>';
+    for (let i = 0; i < 16; i++) body += '<circle cx="' + f1(R() * 800) + '" cy="' + f1(260 + R() * 280) + '" r="2.4" fill="#fff3a3" opacity=".85"/>';
+  } else if (li === 1) { /* Bronze: mis kon va qozonxona */
+    defs = grad("sk", [[0, "#f7dcae"], [1, "#e0905a"]]) + radial("gl", "#ff9a3c", 0.85);
+    body = '<rect width="800" height="600" fill="url(#sk)"/><circle cx="560" cy="170" r="70" fill="#ffe8b8" opacity=".85"/>';
+    [["#b8703f", 330, 6], ["#9a5a2e", 400, 6], ["#7a4423", 470, 5], ["#58301a", 540, 5]].forEach(L => {
+      let p = "0,600 0," + L[1], x = 0;
+      while (x < 800) { p += " " + x + "," + L[1]; x += 40 + R() * 70; p += " " + x + "," + L[1]; p += " " + x + "," + (L[1] + 18 + R() * 20); x += 20 + R() * 30; }
+      body += '<polygon points="' + p + ' 800,' + L[1] + ' 800,600" fill="' + L[0] + '"/>';
+    });
+    body += '<circle cx="170" cy="430" r="110" fill="url(#gl)"/><rect x="140" y="395" width="60" height="75" rx="6" fill="#3b2314"/><rect x="152" y="405" width="36" height="22" rx="4" fill="#ffb347"/><rect x="214" y="350" width="16" height="50" fill="#3b2314"/>';
+    for (let i = 0; i < 10; i++) body += '<circle cx="' + f1(R() * 800) + '" cy="' + f1(380 + R() * 200) + '" r="' + f1(2 + R() * 4) + '" fill="#d98a4e" opacity=".8"/>';
+  } else if (li === 2) { /* Silver: oy nurli tog'lar */
+    defs = grad("sk", [[0, "#0d1730"], [1, "#31456f"]]) + radial("gl", "#e8eeff", 0.5);
+    body = '<rect width="800" height="600" fill="url(#sk)"/>' + stars(70, 300, "#fff") + '<circle cx="610" cy="130" r="120" fill="url(#gl)"/><circle cx="610" cy="130" r="48" fill="#f2f5ff"/><circle cx="598" cy="120" r="9" fill="#d5dcf0"/><circle cx="626" cy="146" r="6" fill="#d5dcf0"/>';
+    body += ridge(380, 170, "#4a5f90", 55) + ridge(450, 150, "#364a78", 50) + ridge(520, 120, "#233358", 45);
+  } else if (li === 3) { /* Gold: qimmatbaho kon */
+    defs = grad("sk", [[0, "#2c1e12"], [1, "#0f0804"]]) + radial("gl", "#ffcc55", 0.95);
+    body = '<rect width="800" height="600" fill="url(#sk)"/>';
+    for (let i = 0; i < 26; i++) { let p = ""; const cx = R() * 800, cy = R() * 600, r = 30 + R() * 60; for (let k = 0; k < 6; k++) { const a = k / 6 * 6.283 + R() * 0.6; p += f1(cx + Math.cos(a) * r) + "," + f1(cy + Math.sin(a) * r * 0.8) + " "; } body += '<polygon points="' + p + '" fill="' + (R() > 0.5 ? "#3a2716" : "#24160b") + '" opacity=".7"/>'; }
+    for (let v = 0; v < 6; v++) { let p = "", x = R() * 800, y = 40 + R() * 500; for (let k = 0; k < 6; k++) { p += f1(x) + "," + f1(y) + " "; x += (R() - 0.3) * 80; y += (R() - 0.4) * 60; } body += '<polyline points="' + p + '" fill="none" stroke="#f0b92a" stroke-width="3.5" stroke-linecap="round" opacity=".85"/>'; }
+    for (let i = 0; i < 22; i++) body += '<circle cx="' + f1(R() * 800) + '" cy="' + f1(R() * 600) + '" r="' + f1(2 + R() * 4) + '" fill="#ffd54d"/>';
+    body += '<rect x="90" y="0" width="30" height="600" fill="#6b4a2b"/><rect x="680" y="0" width="30" height="600" fill="#6b4a2b"/><rect x="60" y="60" width="680" height="26" fill="#7d5733"/>';
+    [[260, 150], [540, 210]].forEach(L => { body += '<circle cx="' + L[0] + '" cy="' + L[1] + '" r="110" fill="url(#gl)"/><line x1="' + L[0] + '" y1="86" x2="' + L[0] + '" y2="' + (L[1] - 14) + '" stroke="#999" stroke-width="2"/><rect x="' + (L[0] - 12) + '" y="' + (L[1] - 14) + '" width="24" height="30" rx="5" fill="#ffd978"/>'; });
+    body += '<rect y="540" width="800" height="60" fill="#1a0f07"/><line x1="0" y1="560" x2="800" y2="560" stroke="#8a8a8a" stroke-width="4"/>';
+    for (let x = 10; x < 800; x += 44) body += '<rect x="' + x + '" y="556" width="26" height="8" fill="#5a3d22"/>';
+    body += '<rect x="430" y="498" width="110" height="52" rx="6" fill="#4b4b55"/><circle cx="460" cy="556" r="10" fill="#222"/><circle cx="512" cy="556" r="10" fill="#222"/>';
+    for (let i = 0; i < 7; i++) body += '<circle cx="' + f1(445 + i * 14) + '" cy="' + f1(494 + R() * 6) + '" r="9" fill="#ffd54d"/>';
+  } else if (li === 4) { /* Platinum: muz g'ori */
+    defs = grad("sk", [[0, "#0b3440"], [1, "#2a8c96"]]) + radial("gl", "#c8f7ff", 0.55);
+    body = '<rect width="800" height="600" fill="url(#sk)"/><circle cx="400" cy="250" r="260" fill="url(#gl)"/>';
+    for (let x = 0; x < 800; x += 26 + R() * 24) { const h = 60 + R() * 170, w = 12 + R() * 18; body += '<polygon points="' + f1(x) + ",0 " + f1(x + w) + ",0 " + f1(x + w / 2) + "," + f1(h) + '" fill="#bff1f6" opacity="' + f1(0.55 + R() * 0.35) + '"/>'; }
+    body += '<polygon points="0,600 0,480 140,450 300,500 480,440 640,490 800,450 800,600" fill="#e8fbff"/>';
+    for (let i = 0; i < 9; i++) { const x = 60 + i * 85 + R() * 30, h = 50 + R() * 90, w = 16 + R() * 14; body += '<polygon points="' + f1(x) + ",520 " + f1(x - w) + ",520 " + f1(x - w * 0.4) + "," + f1(520 - h) + " " + f1(x + w * 0.2) + "," + f1(520 - h * 0.85) + " " + f1(x + w) + ',520" fill="#7fd8e4" opacity=".9"/>'; }
+    for (let i = 0; i < 24; i++) body += sparkle(f1(R() * 800), f1(60 + R() * 440), f1(3 + R() * 6), "#fff");
+  } else if (li === 5) { /* Diamond: kristall g'or */
+    defs = grad("sk", [[0, "#0a1647"], [1, "#46207c"]]) + radial("gl", "#9fd7ff", 0.5);
+    body = '<rect width="800" height="600" fill="url(#sk)"/><circle cx="400" cy="300" r="300" fill="url(#gl)"/>';
+    const diamond = (cx, cy, s, c1, c2) => '<polygon points="' + f1(cx - s * 0.5) + "," + f1(cy - s * 0.35) + " " + f1(cx + s * 0.5) + "," + f1(cy - s * 0.35) + " " + (cx + s) + "," + cy + " " + cx + "," + f1(cy + s * 0.9) + " " + (cx - s) + "," + cy + '" fill="' + c1 + '"/><polygon points="' + f1(cx - s * 0.5) + "," + f1(cy - s * 0.35) + " " + f1(cx + s * 0.5) + "," + f1(cy - s * 0.35) + " " + cx + "," + cy + '" fill="' + c2 + '"/><polygon points="' + (cx - s) + "," + cy + " " + cx + "," + cy + " " + cx + "," + f1(cy + s * 0.9) + '" fill="#000" opacity=".16"/><polygon points="' + (cx + s) + "," + cy + " " + cx + "," + cy + " " + f1(cx + s * 0.5) + "," + f1(cy - s * 0.35) + '" fill="#fff" opacity=".22"/>';
+    [[140, 420, 70, "#4aa8ff", "#a4d8ff"], [660, 440, 84, "#6e8bff", "#b8c6ff"], [400, 360, 120, "#56c2ff", "#c4ecff"], [250, 220, 46, "#8f7bff", "#cfc6ff"], [570, 210, 56, "#4ab8e8", "#b6e8ff"]].forEach(D => { body += diamond(D[0], D[1], D[2], D[3], D[4]); });
+    for (let i = 0; i < 26; i++) body += sparkle(f1(R() * 800), f1(R() * 560), f1(3 + R() * 8), "#fff");
+  } else { /* Crown: qirolliklar */
+    defs = grad("sk", [[0, "#2b1a52"], [0.55, "#b5476a"], [1, "#f4ab5c"]]) + radial("gl", "#ffe3a0", 0.9);
+    body = '<rect width="800" height="600" fill="url(#sk)"/>' + stars(40, 220, "#ffeccf") + '<circle cx="400" cy="380" r="170" fill="url(#gl)"/><circle cx="400" cy="380" r="64" fill="#ffe9b8"/>';
+    const castle = (x, y, s, col, flag) => {
+      let c = '<g fill="' + col + '">' + '<rect x="' + (x - 55 * s) + '" y="' + (y - 70 * s) + '" width="' + 110 * s + '" height="' + 70 * s + '"/>';
+      for (let k = 0; k < 5; k++) c += '<rect x="' + f1(x - 55 * s + k * 24 * s) + '" y="' + f1(y - 82 * s) + '" width="' + 14 * s + '" height="' + 14 * s + '"/>';
+      [[-62, 100], [62, 100], [0, 140]].forEach(T => { const tx = x + T[0] * s, th = T[1] * s; c += '<rect x="' + f1(tx - 13 * s) + '" y="' + f1(y - th) + '" width="' + 26 * s + '" height="' + th + '"/><polygon points="' + f1(tx - 18 * s) + "," + f1(y - th) + " " + f1(tx + 18 * s) + "," + f1(y - th) + " " + f1(tx) + "," + f1(y - th - 34 * s) + '"/>'; });
+      c += "</g>";
+      const fy = y - 140 * s - 34 * s;
+      c += '<line x1="' + x + '" y1="' + f1(fy) + '" x2="' + x + '" y2="' + f1(fy - 26 * s) + '" stroke="' + col + '" stroke-width="' + f1(2 * s) + '"/><polygon points="' + x + "," + f1(fy - 26 * s) + " " + f1(x + 22 * s) + "," + f1(fy - 19 * s) + " " + x + "," + f1(fy - 12 * s) + '" fill="' + flag + '"/>';
+      return c;
+    };
+    body += '<polygon points="0,420 120,380 260,410 420,370 560,405 700,375 800,400 800,600 0,600" fill="#6a3d7e" opacity=".8"/>';
+    [[110, 430, 0.5], [330, 420, 0.45], [520, 428, 0.52], [720, 424, 0.48]].forEach(C => { body += castle(C[0], C[1], C[2], "#4a2a67", "#e3b24a"); });
+    body += '<polygon points="0,470 150,445 330,468 520,442 700,466 800,450 800,600 0,600" fill="#3a2057"/>';
+    [[180, 500, 0.85], [620, 505, 0.9]].forEach(C => { body += castle(C[0], C[1], C[2], "#241437", "#d9423a"); });
+    body += '<rect y="540" width="800" height="60" fill="#160c24"/><polygon points="360,150 370,100 392,128 400,86 408,128 430,100 440,150" fill="#f1c232"/><circle cx="370" cy="98" r="5" fill="#ffe08a"/><circle cx="400" cy="84" r="5" fill="#ffe08a"/><circle cx="430" cy="98" r="5" fill="#ffe08a"/>';
+    for (let i = 0; i < 10; i++) body += sparkle(f1(330 + R() * 140), f1(70 + R() * 100), f1(3 + R() * 5), "#fff3c4");
+  }
+  return '<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" role="presentation"><defs>' + defs + "</defs>" + body + "</svg>";
+}
+let sceneShown = -1;
+function renderScene(force) {
+  const li = leagueIdx(points);
+  if (li === sceneShown && !force) return;
+  sceneShown = li;
+  const el = $("scene");
+  el.style.animation = "none"; void el.offsetWidth; el.style.animation = "";
+  el.innerHTML = sceneSvg(li);
+}
+
+/* ---- ekranlar ---- */
+const SCREENS = ["home", "auth", "modes", "free", "comp", "friend", "queue", "game", "lb", "settings", "contact"];
+const PARENT = { auth: "home", modes: "home", free: "modes", comp: "modes", friend: "comp", queue: "comp", lb: "modes", settings: "home", contact: "home" };
+let screen = "home";
+let signedIn = false;
+function go(s) {
+  if (screen === "game" && s !== "game") leaveGame();
+  if (screen === "queue" && s !== "queue") cancelQueue(true);
+  screen = s;
+  SCREENS.forEach(n => { $("s-" + n).hidden = n !== s; });
+  $("backBtn").hidden = s === "home";
+  $("chip").hidden = s === "home" || s === "auth";
+  $("app").classList.toggle("wide", s === "lb");
+  if (s === "modes") { refillHints(); renderModes(); }
+  if (s === "lb") renderLb();
+  if (s === "comp") renderComp();
+  window.scrollTo(0, 0);
+}
+let backArmed = 0;
+function goBack() {
+  if (screen === "game" && G && G.mode === "match" && !G.finished) {
+    if (Date.now() - backArmed > 3000) { backArmed = Date.now(); toast("Chiqsangiz, o'yin yutqazilgan hisoblanadi. Yana bir marta bosing."); return; }
+  }
+  if (screen === "game") { go(G && G.returnTo || "modes"); return; }
+  go(PARENT[screen] || "home");
+}
+$("backBtn").addEventListener("click", goBack);
+
+/* ---- hisob (kirish) ---- */
+let db = null, userNs = null, room = null, myId = null, canWrite = null, me = null;
+async function renderAuth() {
+  let name = "", avatar = "";
+  try { if (userNs) { me = await userNs.me(); name = me.name; avatar = me.avatarUrl; } } catch (e) {}
+  signedIn = !!myId;
+  $("authName").textContent = name || (myId ? "claude.ai hisobi" : "Mehmon");
+  $("authNote").textContent = myId ? " · kirgansiz" : " · hisobga kirilmagan";
+  if (avatar) $("avatar").src = avatar; else $("avatar").removeAttribute("src");
+  $("authInfo").textContent = myId
+    ? "Reyting va musobaqa shu hisob bilan ishlaydi. Google bilan kirish ilovaning mustaqil versiyasida bo'ladi."
+    : "Hisobga kirmasdan ranksiz va rankli rejimda o'ynash mumkin. Reyting va musobaqa uchun claude.ai hisobi kerak.";
+}
+$("playBtn").addEventListener("click", async () => { await renderAuth(); go("auth"); });
+$("authGo").addEventListener("click", () => go("modes"));
+$("setBtn").addEventListener("click", () => go("settings"));
+$("conBtn").addEventListener("click", () => go("contact"));
+$("swSound").addEventListener("click", () => { settings.sound = !settings.sound; store.set("sozle.settings", settings); applySettings(); if (settings.sound) sfx.key(); });
+$("swAnim").addEventListener("click", () => { settings.anim = !settings.anim; store.set("sozle.settings", settings); applySettings(); });
+
+/* ---- daraja kartasi va rejimlar ---- */
+function renderRank() {
+  const ti = tierIndex(points), t = TIERS[ti], next = TIERS[ti + 1] || null;
+  const span = Math.max(1, t.to - t.from);
+  const pct = next ? Math.min(100, Math.round(((points - t.from) / span) * 100)) : 100;
+  $("rankName").textContent = t.league.name;
+  $("tierName").textContent = t.name;
+  $("chipName").textContent = tierLabel(t);
+  $("chipDot").style.background = t.league.color;
+  $("pts").textContent = points + " ball";
+  $("bar").style.width = pct + "%";
+  $("bar").style.background = t.league.color;
+  $("barWrap").setAttribute("aria-valuenow", String(pct));
+  $("toNext").textContent = next ? tierLabel(next) + " uchun yana " + (next.from - points) + " ball" : "Eng yuqori daraja";
+  $("stats").textContent = "O'yin: " + stats.played + " · G'alaba: " + stats.won;
+  const tb = $("ladder");
+  tb.innerHTML = "";
+  let start = 0;
+  LEAGUES.forEach(L => {
+    const tr = document.createElement("tr");
+    if (L === t.league) tr.className = "me";
+    tr.innerHTML = '<td><span class="dot" style="background:' + L.color + '"></span>' + L.name + "</td><td>" + L.tiers.join(" · ") + "</td><td>" + start + "–" + L.end + "</td><td>" + (L.pen ? "−" + L.pen : "0") + "</td>";
+    tb.appendChild(tr);
+    start = L.end;
+  });
+  renderScene();
+}
+function rankedClosed() { return leagueIdx(points) >= RANKED_CLOSES_AT; }
+function renderModes() {
+  renderRank();
+  const closed = rankedClosed();
+  $("mRanked").classList.toggle("locked", closed);
+  $("mRankedNote").textContent = closed ? "Gold ligasida yopiladi. Endi faqat musobaqada davom eting" : "Ball to'plang va Gold ligasigacha ko'tariling";
+}
+$("mRanked").addEventListener("click", () => {
+  if (rankedClosed()) { toast("Rankli rejim Gold ligasida yopiladi. Musobaqaga o'ting."); go("comp"); return; }
+  startGame({ mode: "ranked", tries: 6, showType: true, hintSrc: "stock", scoring: true, returnTo: "modes" });
+});
+$("mFree").addEventListener("click", () => go("free"));
+$("mComp").addEventListener("click", () => go("comp"));
+$("mLb").addEventListener("click", () => go("lb"));
+document.querySelectorAll("[data-diff]").forEach(b => b.addEventListener("click", () => {
+  const d = b.dataset.diff;
+  const cfg = {
+    easy:   { tries: 7, showType: true,  roundHints: 2, pos: ["ot"] },
+    medium: { tries: 6, showType: true,  roundHints: 1, pos: ["ot", "sifat"] },
+    hard:   { tries: 5, showType: false, roundHints: 0, pos: null }
+  }[d];
+  startGame({ mode: "free", tries: cfg.tries, showType: cfg.showType, hintSrc: cfg.roundHints ? "round" : "none", roundHints: cfg.roundHints, pos: cfg.pos, scoring: false, returnTo: "free" });
+}));
+$("freeFriend").addEventListener("click", () => openFriend("free"));
+
+/* ---- o'yin ---- */
+let G = null, answer = [], answerPos = "", rows = [], current = [], over = false, locked = false, revealed = [], picking = false, lastWord = "";
+const boardEl = $("board"), kbEl = $("kb"), msgEl = $("msg");
+
+function pickWord(cfg) {
+  if (cfg.word) return cfg.word;
+  const pool = cfg.pos ? ANSWERS.filter(a => cfg.pos.includes(a[1])) : ANSWERS;
+  let pick;
+  do { pick = pool[Math.floor(Math.random() * pool.length)]; } while (pick[0] === lastWord && pool.length > 1);
+  lastWord = pick[0];
+  return pick;
+}
+function startGame(cfg) {
+  G = Object.assign({}, cfg, { finished: false, myDone: false });
+  if (G.baseHints === undefined) G.baseHints = cfg.roundHints || 0;
+  G.roundHints = G.baseHints;
+  const pick = pickWord(cfg);
+  answer = tokenize(pick[0]); answerPos = pick[1];
+  rows = []; current = []; over = false; locked = !!cfg.locked; revealed = [false, false, false, false, false]; picking = false;
+  G.t0 = performance.now();
+  $("hintText").textContent = answerPos;
+  $("hintText").hidden = !cfg.showType; $("typeLab").hidden = !cfg.showType;
+  $("hintBtn").hidden = cfg.hintSrc === "none";
+  $("opp").hidden = cfg.mode !== "match";
+  $("count").hidden = true;
+  setMsg("");
+  buildBoard(); renderBoard(); renderKeys(); renderPower();
+  if (screen !== "game") go("game");
+}
+function leaveGame() {
+  if (G && G.mode === "match") leaveMatch();
+  G = null;
+}
+function buildBoard() {
+  boardEl.innerHTML = "";
+  boardEl.style.setProperty("--rows", G.tries);
+  for (let r = 0; r < G.tries; r++) {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "row" + r;
+    for (let c = 0; c < LEN; c++) { const t = document.createElement("div"); t.className = "tile"; row.appendChild(t); }
+    boardEl.appendChild(row);
+  }
+}
+function setTile(el, token, cls, reveal, delay, count) {
+  el.textContent = token ? label(token) : "";
+  el.className = "tile" + (token && token.length > 1 && alpha === "old" ? " long" : "") + (cls ? " " + cls : "");
+  if (count > 1) el.dataset.n = String(count); else delete el.dataset.n;
+  if (reveal) { el.classList.add("reveal"); el.style.animationDelay = delay + "ms"; } else el.style.animationDelay = "";
+}
+function renderBoard(revealRow) {
+  for (let r = 0; r < G.tries; r++) {
+    const tiles = boardEl.children[r].children;
+    if (r < rows.length) {
+      const res = evaluate(rows[r], answer);
+      for (let c = 0; c < LEN; c++) {
+        const tk = rows[r][c];
+        const n = res[c] === "off" ? 0 : answer.filter(x => x === tk).length;
+        setTile(tiles[c], tk, res[c], r === revealRow, c * 110, n);
+      }
+    } else if (r === rows.length && !over) {
+      for (let c = 0; c < LEN; c++) { const tk = current[c]; setTile(tiles[c], tk, tk ? "filled" : "", false, 0, 0); }
+    } else for (let c = 0; c < LEN; c++) setTile(tiles[c], "", "", false, 0, 0);
+  }
+}
+function keyStates() {
+  const rank = { off: 1, warn: 2, ok: 3 }, st = {};
+  rows.forEach(g => { const res = evaluate(g, answer); g.forEach((t, i) => { if (!st[t] || rank[res[i]] > rank[st[t]]) st[t] = res[i]; }); });
+  return st;
+}
+function renderKeys() {
+  const st = keyStates();
+  kbEl.innerHTML = "";
+  KB_ROWS.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "krow";
+    r.forEach(k => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "key" + (k === "ENTER" || k === "BACK" ? " wide" : "") + (st[k] ? " " + st[k] : "");
+      b.dataset.k = k;
+      if (k === "ENTER") { b.textContent = "Enter"; b.setAttribute("aria-label", "Yuborish"); }
+      else if (k === "BACK") { b.textContent = "⌫"; b.setAttribute("aria-label", "O'chirish"); }
+      else b.textContent = label(k);
+      row.appendChild(b);
+    });
+    kbEl.appendChild(row);
+  });
+  updateEnter();
+}
+function updateEnter() { const b = kbEl.querySelector('[data-k="ENTER"]'); if (b) b.disabled = over || locked || current.length < LEN; }
+function setMsg(html, kind) {
+  msgEl.className = "msg" + (kind === "win" ? " win" : "");
+  msgEl.innerHTML = html || "";
+}
+function addBtns(list) {
+  const wrap = document.createElement("div");
+  wrap.className = "btns";
+  list.forEach(([text, fn, ghost]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "again" + (ghost ? " ghost" : ""); b.textContent = text;
+    b.addEventListener("click", fn);
+    wrap.appendChild(b);
+  });
+  msgEl.appendChild(wrap);
+}
+
+/* ---- harf ochish maslahati ---- */
+function hintsLeft() { return !G ? 0 : G.hintSrc === "stock" ? hints : G.hintSrc === "round" ? G.roundHints : 0; }
+function renderPower() {
+  if (!G) return;
+  const anyRevealed = revealed.some(Boolean), all = revealed.every(Boolean);
+  $("hintCount").textContent = String(hintsLeft());
+  $("hintBtn").disabled = over || locked || hintsLeft() <= 0 || all;
+  const timer = $("hintTimer");
+  if (G.hintSrc === "stock") {
+    timer.hidden = false;
+    timer.textContent = hints < HINT_REFILL_CAP ? "Keyingi bepul maslahat: " + timeLeftText(hintAt + HINT_REFILL_MS - Date.now()) : "Bepul maslahat zaxirasi to'la";
+  } else timer.hidden = true;
+  const slots = $("slots");
+  slots.hidden = !(picking || anyRevealed);
+  slots.innerHTML = "";
+  if (slots.hidden) return;
+  if (picking) { const cap = document.createElement("span"); cap.className = "cap"; cap.textContent = "Qaysi o'rin?"; slots.appendChild(cap); }
+  for (let i = 0; i < LEN; i++) {
+    const b = document.createElement("button");
+    b.type = "button"; b.dataset.i = String(i);
+    if (revealed[i]) { b.className = "slot shown"; b.textContent = label(answer[i]); b.setAttribute("aria-label", (i + 1) + "-o'rindagi harf"); b.disabled = true; }
+    else if (picking) { b.className = "slot pick"; b.textContent = String(i + 1); b.setAttribute("aria-label", (i + 1) + "-o'rinni ochish"); }
+    else { b.className = "slot"; b.textContent = "·"; b.disabled = true; }
+    slots.appendChild(b);
+  }
+}
+$("hintBtn").addEventListener("click", () => { if (!G || over || locked || hintsLeft() <= 0) return; picking = !picking; renderPower(); });
+$("slots").addEventListener("click", e => {
+  const b = e.target.closest("button[data-i]");
+  if (!b || !picking || over || !G) return;
+  const i = Number(b.dataset.i);
+  if (revealed[i] || hintsLeft() <= 0) return;
+  revealed[i] = true;
+  if (G.hintSrc === "stock") { hints--; persist(); } else G.roundHints--;
+  picking = false;
+  sfx.tick();
+  renderPower();
+  setMsg("<span>" + (i + 1) + "-o'rindagi harf ochildi</span>");
+});
+
+/* ---- kiritish ---- */
+function addToken(t) {
+  if (!G || over || locked || current.length >= LEN) return;
+  current.push(t); sfx.key(); setMsg(""); renderBoard(); updateEnter();
+}
+function removeToken() {
+  if (!G || over || locked || !current.length) return;
+  current.pop(); sfx.del(); setMsg(""); renderBoard(); updateEnter();
+}
+function celebrate() {
+  if (!settings.anim) return;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const last = boardEl.children[rows.length - 1];
+  if (last) Array.from(last.children).forEach((t, i) => { t.style.animationDelay = i * 90 + "ms"; t.classList.remove("reveal"); t.classList.add("win"); });
+  const box = document.createElement("div");
+  box.className = "confetti";
+  const cols = ["#2F7D4F", "#E3B93C", "#2F8FD8", "#C99A12", "#8E44AD", "#B87333"];
+  for (let i = 0; i < 48; i++) {
+    const p = document.createElement("i");
+    p.style.left = Math.random() * 100 + "%";
+    p.style.background = cols[i % cols.length];
+    p.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+    p.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+    p.style.animationDelay = Math.random() * 350 + "ms";
+    p.style.animationDuration = 1.2 + Math.random() * 0.8 + "s";
+    box.appendChild(p);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 2600);
+}
+function submit() {
+  if (!G || over || locked) return;
+  const row = $("row" + rows.length);
+  const shake = () => { row.classList.remove("shake"); void row.offsetWidth; row.classList.add("shake"); sfx.bad(); };
+  if (current.length < LEN) { shake(); setMsg("<span>5 ta belgi kiriting</span>"); return; }
+  if (!VALID.has(current.join(""))) { shake(); setMsg("<span>Bunday o'zbekcha so'z topilmadi. Boshqa so'z yozing.</span>"); return; }
+  setMsg("");
+  const guess = current.slice();
+  rows.push(guess); current = []; picking = false;
+  const won = guess.every((t, i) => t === answer[i]);
+  const lost = !won && rows.length >= G.tries;
+  if (won || lost) over = true;
+  renderBoard(rows.length - 1); renderKeys(); renderPower();
+  for (let i = 0; i < LEN; i++) sfx.flip(i);
+  if (G.mode === "match") pushMatchState(won || lost, won);
+  if (won || lost) setTimeout(() => finishGame(won), 650);
+}
+kbEl.addEventListener("click", e => {
+  const b = e.target.closest("button[data-k]");
+  if (!b) return;
+  const k = b.dataset.k;
+  if (e.detail > 0) b.blur();
+  if (k === "ENTER") submit(); else if (k === "BACK") removeToken(); else addToken(k);
+});
+document.addEventListener("keydown", e => {
+  if (screen !== "game" || !G) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+  const k = e.key;
+  if (k === "Enter") { if (document.activeElement && document.activeElement.tagName === "BUTTON") return; submit(); }
+  else if (k === "Backspace") removeToken();
+  else if (FROM_NEW[k.toLowerCase()]) addToken(FROM_NEW[k.toLowerCase()]);
+  else if (/^[a-z]$/i.test(k) && SINGLES.has(k.toLowerCase())) addToken(k.toLowerCase());
+  else if (["'", "‘", "’", "ʻ", "ʼ", "`"].includes(k)) {
+    const last = current[current.length - 1];
+    if (!over && !locked && (last === "o" || last === "g")) { current[current.length - 1] = last + "'"; sfx.key(); renderBoard(); }
+  }
+});
+
+/* ---- butun interfeysni tanlangan alifboga o'tkazish ----
+   Matn qo'ldan almashtirilmaydi: ekrandagi har bir matn va yorliq yagona qoida bilan o'giriladi,
+   asl matn esa saqlanadi, shuning uchun "Eski" ga qaytganda hammasi avvalgi holatiga qaytadi. */
+const PROTECT = ["Polished"];
+function ui(s) {
+  if (alpha !== "new" || typeof s !== "string" || !s) return s;
+  PROTECT.forEach((w, i) => { s = s.split(w).join("\u0001" + i + "\u0002"); });
+  s = s.replace(/([OoGg])['ʻʼ‘’`]/g, (m, c) => ({ o: "ö", O: "Ö", g: "ğ", G: "Ğ" })[c]);
+  s = s.replace(/sh/gi, m => m === "sh" ? "ş" : "Ş");
+  s = s.replace(/ch/gi, m => m === "ch" ? "ç" : "Ç");
+  PROTECT.forEach((w, i) => { s = s.split("\u0001" + i + "\u0002").join(w); });
+  return s;
+}
+const UI_SKIP = "script, style, textarea, .tile, .key, .nm, .who b, #authName, #oppWho, #codeText, .codebox, #avatar, [data-raw]";
+const UI_ATTRS = ["placeholder", "aria-label", "title"];
+const TEXT_ORIG = new WeakMap();
+let uiObs = null;
+function uiText(n) {
+  const p = n.parentElement;
+  if (!p || p.closest(UI_SKIP)) return;
+  let orig = TEXT_ORIG.get(n);
+  const cur = n.nodeValue;
+  if (orig === undefined || ui(orig) !== cur) { orig = cur; TEXT_ORIG.set(n, cur); }
+  const out = alpha === "new" ? ui(orig) : orig;
+  if (out !== cur) n.nodeValue = out;
+}
+function uiAttrs(el) {
+  if (!el.closest || el.closest(UI_SKIP)) return;
+  UI_ATTRS.forEach(a => {
+    if (!el.hasAttribute(a)) return;
+    const key = "data-orig-" + a;
+    const cur = el.getAttribute(a);
+    let orig = el.getAttribute(key);
+    if (orig === null || ui(orig) !== cur) { orig = cur; el.setAttribute(key, cur); }
+    const out = alpha === "new" ? ui(orig) : orig;
+    if (out !== cur) el.setAttribute(a, out);
+  });
+}
+function uiTree(root) {
+  if (root.nodeType === 3) { uiText(root); return; }
+  if (root.nodeType !== 1) return;
+  uiAttrs(root);
+  root.querySelectorAll("[placeholder], [aria-label], [title]").forEach(uiAttrs);
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let n; while ((n = w.nextNode())) uiText(n);
+}
+function applyUI() {
+  if (!uiObs) {
+    uiObs = new MutationObserver(recs => {
+      recs.forEach(r => {
+        if (r.type === "childList") r.addedNodes.forEach(uiTree);
+        else if (r.type === "characterData") uiText(r.target);
+        else if (r.type === "attributes") uiAttrs(r.target);
+      });
+      uiObs.takeRecords();
+    });
+    uiObs.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: UI_ATTRS });
+  }
+  uiTree(document.body);
+  uiObs.takeRecords();
+}
+
+function setAlpha(a) {
+  alpha = a;
+  store.set("sozle.alpha", a);
+  $("alphaNew").setAttribute("aria-pressed", String(a === "new"));
+  $("alphaOld").setAttribute("aria-pressed", String(a === "old"));
+  if (G) { renderBoard(); renderKeys(); renderPower(); }
+  try { renderLb(); } catch (e) {}
+  applyUI();
+}
+$("alphaNew").addEventListener("click", () => setAlpha("new"));
+$("alphaOld").addEventListener("click", () => setAlpha("old"));
+$("alphaNew").setAttribute("aria-pressed", String(alpha === "new"));
+$("alphaOld").setAttribute("aria-pressed", String(alpha === "old"));
+applyUI();
+
+/* ---- ball va daraja ---- */
+function commitPoints(delta) {
+  const before = points, bi = tierIndex(before);
+  points = Math.max(0, before + delta);
+  const ai = tierIndex(points);
+  let bonus = false;
+  if (!reached.includes(ai)) { reached.push(ai); hints++; bonus = true; }
+  persist(); renderRank(); pushScore();
+  return { bi, ai, bonus, actual: points - before };
+}
+function tierLine(r) {
+  if (r.ai > r.bi) return "<span>Yangi daraja: <b>" + tierLabel(TIERS[r.ai]) + "</b>" + (r.bonus ? ". Sizga 1 ta harf ochish maslahati berildi." : "") + "</span>";
+  if (r.ai < r.bi) return "<span>Daraja tushdi: <b>" + tierLabel(TIERS[r.ai]) + "</b></span>";
+  return "";
+}
+function finishGame(won) {
+  if (!G) return;
+  const word = answer.map(label).join("");
+  if (G.mode === "match") { G.myDone = true; G.mySolved = won; G.myTries = rows.length; finalizeMatch(); return; }
+  G.finished = true;
+  if (won) { celebrate(); sfx.win(); } else sfx.lose();
+  if (G.mode === "ranked") {
+    const pen = TIERS[tierIndex(points)].league.pen;
+    const delta = won ? 7 - rows.length : -pen;
+    stats.played++; if (won) stats.won++;
+    const r = commitPoints(delta);
+    let line;
+    if (won) line = "<b>" + (rows.length === 1 ? "Ajoyib, birinchi urinishda!" : rows.length <= 3 ? "Barakalla!" : "Topdingiz!") + "</b><span>+" + delta + " ball</span>";
+    else line = "<b>Bu safar bo'lmadi</b><span>So'z: " + word + " (" + answerPos + ")</span><span>" + (r.actual < 0 ? "−" + (-r.actual) + " ball" : "ball o'zgarmadi") + ". Keyingisida omad!</span>";
+    setMsg(line + tierLine(r), won ? "win" : "");
+    addBtns([["Yangi so'z", () => (rankedClosed() ? (toast("Rankli rejim Gold ligasida yopildi. Musobaqaga o'ting."), go("comp")) : startGame(G)), false], ["Menyu", () => go("modes"), true]]);
+  } else {
+    setMsg(won ? "<b>" + (rows.length === 1 ? "Ajoyib, birinchi urinishda!" : "Topdingiz!") + "</b><span>Mashq o'yini, ball berilmaydi</span>" : "<b>Bu safar bo'lmadi</b><span>So'z: " + word + " (" + answerPos + ")</span>", won ? "win" : "");
+    addBtns([["Yangi so'z", () => startGame(G), false], ["Menyu", () => go(G.returnTo || "modes"), true]]);
+  }
+}
+
+/* ---- musobaqa: raqib qidirish va do'st xonasi ---- */
+let mm = null;     /* hozirgi musobaqa: {r, kind, state, ...} */
+let queue = null;  /* navbat holati */
+function renderComp() {
+  $("compRandom").disabled = !room || !myId;
+  $("compFriend").disabled = !room || !myId;
+  $("compNote").textContent = !myId ? "Musobaqa uchun claude.ai hisobiga kirish kerak." : !room ? "Musobaqa bu ko'rinishda ishlamaydi: sahifa boshqa o'yinchilar bilan ulana olmadi." : "Raqib bilan bir vaqtda sahifada bo'lishingiz kerak. Sahifa faqat taklif qilingan odamlarga ochiq.";
+}
+$("compRandom").addEventListener("click", startQueue);
+$("compFriend").addEventListener("click", () => openFriend("comp"));
+function startQueue() {
+  if (!room || !myId) return renderComp();
+  const bracket = leagueIdx(points);
+  queue = { bracket, ts: Date.now(), timer: null, unsub: null, t0: Date.now() };
+  go("queue");
+  $("queueNote").textContent = "Sizning ligangizdagi (" + LEAGUES[bracket].name + ") onlayn o'yinchi izlanmoqda...";
+  room.presence({ q: { b: bracket, ts: queue.ts } });
+  queue.unsub = room.onPeers(ch => evalQueue(ch.peers));
+  queue.long = setTimeout(() => { if (queue) $("queueNote").textContent = "Hozircha raqib topilmadi. Qidiruv davom etmoqda yoki do'st bilan o'ynang."; }, 45000);
+}
+function evalQueue(peers) {
+  if (!queue || queue.joining) return;
+  clearTimeout(queue.timer);
+  const pr = pairFor(peers, queue.bracket);
+  if (!pr) return;
+  queue.timer = setTimeout(async () => {
+    if (!queue || queue.joining) return;
+    const pr2 = pairFor(room.peers(), queue.bracket);
+    if (!pr2) return;
+    queue.joining = true;
+    const name = "m-" + [pr2.me.peer, pr2.partner.peer].map(roomSafe).sort().join("-");
+    try {
+      const r = await room.join(name.slice(0, 48));
+      cancelQueue(true, true);
+      beginMatch(r, "random");
+    } catch (e) { queue && (queue.joining = false); toast("Raqibga ulanib bo'lmadi, qayta urinilmoqda"); }
+  }, 1200);
+}
+function cancelQueue(silent, keepPresence) {
+  if (!queue) return;
+  clearTimeout(queue.timer); clearTimeout(queue.long);
+  if (queue.unsub) queue.unsub();
+  /* juftlik xonaga kirguncha navbat belgisi turadi, aks holda raqib bizni ko'rmay qoladi */
+  if (!keepPresence) { try { room && room.presence({ q: null }); } catch (e) {} }
+  queue = null;
+  if (!silent) go("comp");
+}
+$("queueCancel").addEventListener("click", () => cancelQueue(false));
+
+let friendKind = "comp";
+function openFriend(kind) {
+  friendKind = kind;
+  const comp = kind === "comp";
+  $("friendTitle").textContent = comp ? "Musobaqa: do'st bilan" : "Ranksiz: do'st bilan";
+  $("friendRule").textContent = comp ? "Do'stingiz sizning ligangizda bo'lishi kerak. Natija ballga ta'sir qiladi." : "Istalgan ligadagi do'st bilan o'ynash mumkin. Ball o'zgarmaydi.";
+  $("hostCode").hidden = true; $("hostBtn").hidden = false; $("friendMsg").textContent = "";
+  $("hostBtn").disabled = !room || !myId; $("joinInput").disabled = !room || !myId;
+  if (!room || !myId) $("friendMsg").textContent = "Do'st bilan o'ynash uchun claude.ai hisobi va boshqa o'yinchi bilan ulanish kerak.";
+  PARENT.friend = kind === "comp" ? "comp" : "free";
+  go("friend");
+}
+const genCode = () => { const a = "abcdefghjkmnpqrstuvwxyz23456789"; let s = ""; for (let i = 0; i < 5; i++) s += a[Math.floor(Math.random() * a.length)]; return s; };
+$("hostBtn").addEventListener("click", async () => {
+  if (!room) return;
+  const code = genCode();
+  try {
+    const r = await room.join("f-" + code);
+    $("codeText").textContent = code; $("hostCode").hidden = false; $("hostBtn").hidden = true;
+    $("hostState").textContent = "Do'st kutilmoqda...";
+    beginMatch(r, friendKind === "comp" ? "friend-comp" : "friend-free", true);
+  } catch (e) { $("friendMsg").textContent = "Xona ochib bo'lmadi. Keyinroq urinib ko'ring."; }
+});
+$("joinForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const code = $("joinInput").value.trim().toLowerCase();
+  if (!/^[a-z0-9]{5}$/.test(code)) { $("friendMsg").textContent = "Kod 5 ta belgidan iborat bo'lishi kerak."; return; }
+  if (!room) return;
+  try {
+    const r = await room.join("f-" + code);
+    $("friendMsg").textContent = "Xonaga ulanilmoqda...";
+    beginMatch(r, friendKind === "comp" ? "friend-comp" : "friend-free", false);
+  } catch (err) { $("friendMsg").textContent = "Xonaga kirib bo'lmadi."; }
+});
+
+function beginMatch(r, kind, host) {
+  mm = { r, kind, host: !!host, state: "wait", unsub: null, t0: 0, oppSeen: false, startedAt: Date.now() };
+  r.presence({ ready: true, lg: leagueIdx(points), nick: nick || "O'yinchi" });
+  mm.unsub = r.onPeers(ch => onRoomPeers(ch.peers));
+  if (kind === "random") {
+    /* raqib 15 soniyada xonaga kirmasa, qidiruvga qaytamiz */
+    mm.joinTimer = setTimeout(() => {
+      if (mm && mm.state === "wait") { try { room.presence({ q: null }); } catch (e) {} leaveMatch(); toast("Raqib ulanmadi. Qayta qidirib ko'ring."); go("comp"); }
+    }, 15000);
+  } else if (!host) {
+    mm.joinTimer = setTimeout(() => {
+      if (mm && mm.state === "wait" && mm.r.peers().filter(p => !p.isMe).length === 0) {
+        $("friendMsg").textContent = "Bunday xona topilmadi yoki do'st hali kirmagan.";
+        leaveMatch();
+      }
+    }, 5000);
+  }
+}
+function others(peers) { return peers.filter(p => !p.isMe && p.kind === "viewer"); }
+function onRoomPeers(peers) {
+  if (!mm) return;
+  const o = others(peers);
+  if (mm.state === "wait") {
+    if (o.length > 1) { $("friendMsg").textContent = "Xona to'la."; toast("Xona to'la"); leaveMatch(); return; }
+    if (o.length === 1 && o[0].presence && o[0].presence.ready) {
+      if (mm.kind === "friend-comp" && o[0].presence.lg !== leagueIdx(points)) {
+        const msg = "Do'stingiz boshqa ligada (" + (LEAGUES[o[0].presence.lg] ? LEAGUES[o[0].presence.lg].name : "?") + "). Musobaqada liga bir xil bo'lishi kerak.";
+        $("friendMsg").textContent = msg; $("hostState").textContent = msg; toast(msg); leaveMatch(); return;
+      }
+      mm.state = "count"; mm.oppSeen = true;
+      clearTimeout(mm.joinTimer);
+      try { if (mm.kind === "random") room.presence({ q: null }); } catch (e) {}
+      startMatchGame(o[0]);
+    }
+  } else if (mm.state === "play") {
+    const opp = o[0];
+    if (!opp) { if (mm.oppSeen) { mm.oppLeft = true; if (G && G.myDone) finalizeMatch(); renderOpp(null); } return; }
+    mm.oppSeen = true; mm.oppLeft = false;
+    renderOpp(opp);
+    if (G && G.myDone) finalizeMatch();
+  }
+}
+function startMatchGame(opp) {
+  const seedName = mm.r.name;
+  const pick = ANSWERS[hash(seedName) % ANSWERS.length];
+  const scoring = mm.kind !== "friend-free";
+  startGame({ mode: "match", kind: mm.kind, tries: 6, showType: true, hintSrc: "none", scoring, word: pick, returnTo: mm.kind === "friend-free" ? "free" : "comp", locked: true });
+  go("game");
+  G.returnTo = mm.kind === "friend-free" ? "free" : "comp";
+  renderOpp(opp);
+  const c = $("count"); c.hidden = false;
+  let n = 3; c.textContent = String(n); sfx.tick();
+  const iv = setInterval(() => {
+    n--;
+    if (!mm || screen !== "game") { clearInterval(iv); return; }
+    if (n > 0) { c.textContent = String(n); sfx.tick(); }
+    else { clearInterval(iv); c.hidden = true; locked = false; G.t0 = performance.now(); mm.state = "play"; updateEnter(); renderPower(); setMsg("<span>Boshlandi! Birinchi so'zni yozing.</span>"); sfx.win(); }
+  }, 900);
+}
+function renderOpp(opp) {
+  const who = $("oppWho"), mini = $("oppMini");
+  who.innerHTML = "";
+  const b = document.createElement("b");
+  b.textContent = opp && opp.presence && opp.presence.nick ? String(opp.presence.nick).slice(0, 14) : "Raqib";
+  who.append("Raqib: ", b);
+  mini.innerHTML = "";
+  const res = (opp && opp.presence && Array.isArray(opp.presence.res)) ? opp.presence.res : [];
+  for (let r = 0; r < 6; r++) {
+    const s = typeof res[r] === "string" ? res[r] : "";
+    for (let c = 0; c < LEN; c++) { const i = document.createElement("i"); const ch = s[c]; if (ch === "g" || ch === "y" || ch === "b") i.className = ch; mini.appendChild(i); }
+  }
+}
+function pushMatchState(done, solved) {
+  if (!mm || !G) return;
+  const res = rows.map(g => evaluate(g, answer).map(x => x === "ok" ? "g" : x === "warn" ? "y" : "b").join(""));
+  const ms = Math.round(performance.now() - G.t0);
+  mm.r.presence({ res, done: !!done, solved: !!solved, tries: rows.length, ms });
+  G.myMs = ms;
+}
+function finalizeMatch() {
+  if (!G || !mm || G.finished) return;
+  const o = others(mm.r.peers())[0];
+  const oppDone = !!(o && o.presence && o.presence.done);
+  if (!oppDone && !mm.oppLeft) {
+    setMsg("<span>Raqib tugatishini kutmoqda...</span>");
+    return;
+  }
+  G.finished = true;
+  const mine = { solved: !!G.mySolved, tries: G.myTries || rows.length, ms: G.myMs || 0 };
+  let outcome;
+  if (!oppDone) outcome = 1; /* raqib chiqib ketdi */
+  else outcome = cmpMatch(mine, { solved: !!o.presence.solved, tries: Number(o.presence.tries) || 6, ms: Number(o.presence.ms) || 0 });
+  const word = answer.map(label).join("");
+  let line, r = null;
+  if (G.scoring) {
+    const pen = TIERS[tierIndex(points)].league.pen;
+    let delta = 0;
+    if (outcome === 1) delta = (mine.solved ? 7 - mine.tries : 0) + 3;
+    else if (outcome === -1) delta = -pen;
+    stats.played++; if (outcome === 1) stats.won++;
+    r = commitPoints(delta);
+    line = delta > 0 ? "<span>+" + delta + " ball</span>" : r.actual < 0 ? "<span>−" + (-r.actual) + " ball</span>" : "<span>ball o'zgarmadi</span>";
+  } else line = "<span>Ranksiz o'yin, ball berilmaydi</span>";
+  if (outcome === 1) { celebrate(); sfx.win(); } else if (outcome === -1) sfx.lose();
+  const head = outcome === 1 ? (oppDone ? "Siz yutdingiz!" : "Raqib chiqib ketdi, siz yutdingiz") : outcome === -1 ? "Raqib yutdi" : "Durang";
+  setMsg("<b>" + head + "</b><span>So'z: " + word + " (" + answerPos + ")</span>" + line + (r ? tierLine(r) : ""), outcome === 1 ? "win" : "");
+  addBtns([["Menyu", () => go(G.returnTo || "comp"), false]]);
+}
+function leaveMatch() {
+  if (!mm) return;
+  clearTimeout(mm.joinTimer);
+  const m = mm; mm = null;
+  /* o'yin davomida chiqib ketish yutqazish hisoblanadi */
+  if (G && G.mode === "match" && !G.finished && m.state === "play" && G.scoring) {
+    const pen = TIERS[tierIndex(points)].league.pen;
+    stats.played++;
+    commitPoints(-pen);
+  }
+  if (m.unsub) m.unsub();
+  try { m.r.leave(); } catch (e) {}
+}
+
+/* ---- reyting (umumiy ma'lumotlar bazasi) ---- */
+let lbDocs = [], lbError = "", lbStatus = "", sample = false;
+let writing = false, pending = false;
+function sampleEntries() {
+  const names = ["Burgut", "Lochin", "Sher", "Yo'lbars", "Qoplon", "Bo'ri", "Tulki", "Quyon", "Ayiq", "Kiyik"];
+  const out = [];
+  for (let i = 0; i < 100; i++) out.push({ id: "s" + i, name: names[i % names.length] + (i + 1), points: Math.max(0, 985 - i * 9 - (i % 3) * 2) });
+  return out;
+}
+function entries() {
+  if (sample) return sampleEntries();
+  return lbDocs.filter(d => typeof d.points === "number" && typeof d.name === "string").slice(0, 100);
+}
+function renderLb() {
+  if (screen !== "lb") return;
+  const list = entries();
+  $("sampleBanner").hidden = !sample;
+  $("sampleBtn").textContent = sample ? "Namunani yashirish" : "Namuna ko'rinishni ko'rsatish";
+  const pod = $("podium"); pod.innerHTML = "";
+  [[1, "p2"], [0, "p1"], [2, "p3"]].forEach(([i, cls]) => {
+    const e = list[i];
+    const d = document.createElement("div");
+    d.className = "pod " + cls + (e ? "" : " empty") + (e && e.id === myId ? " me" : "");
+    const m = document.createElement("div"); m.className = "medal"; m.textContent = String(i + 1);
+    const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = e ? e.name : ui("Bo'sh o'rin");
+    const tr = document.createElement("div"); tr.className = "tr"; tr.textContent = e ? tierLabel(TIERS[tierIndex(e.points)]) : "—";
+    const sc = document.createElement("div"); sc.className = "sc"; sc.textContent = e ? String(e.points) : "";
+    d.append(m, nm, tr, sc); pod.appendChild(d);
+  });
+  const ol = $("lbList"); ol.innerHTML = "";
+  list.slice(3).forEach((e, k) => {
+    const li = document.createElement("li");
+    li.className = "lb-row" + (e.id === myId ? " me" : "");
+    const no = document.createElement("span"); no.className = "no"; no.textContent = String(k + 4);
+    const who = document.createElement("div"); who.className = "who";
+    const b = document.createElement("b"); b.textContent = e.name;
+    const s = document.createElement("span"); s.textContent = tierLabel(TIERS[tierIndex(e.points)]);
+    who.append(b, s);
+    const pt = document.createElement("span"); pt.className = "pt"; pt.textContent = String(e.points);
+    li.append(no, who, pt); ol.appendChild(li);
+  });
+  ol.hidden = list.length <= 3;
+  const empty = $("lbEmpty");
+  if (!list.length) { empty.hidden = false; empty.textContent = db ? "Reytingda hali hech kim yo'q. Taxallus kiriting va o'ynang, birinchi bo'lasiz." : "Umumiy reyting bu ko'rinishda ishlamaydi. Namuna ko'rinish orqali dizaynni ko'rishingiz mumkin."; }
+  else empty.hidden = true;
+  $("nickForm").hidden = !db;
+  if (document.activeElement !== $("nickInput")) $("nickInput").value = nick;
+  let note = lbStatus || lbError;
+  if (!note) {
+    if (!db) note = "Umumiy reyting uchun claude.ai hisobiga kirish kerak.";
+    else if (!nick) note = "Reytingda ko'rinish uchun taxallus kiriting.";
+    else if (canWrite === false) note = "Reytingni ko'ra olasiz, lekin natija yuborish uchun sahifaga Contributor huquqi kerak.";
+    else note = "Sizning ballingiz: " + points + ". Natija har o'yindan keyin yuboriladi.";
+  }
+  $("lbNote").textContent = note;
+}
+$("sampleBtn").addEventListener("click", () => { sample = !sample; renderLb(); });
+$("nickForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const v = $("nickInput").value.trim();
+  if (!/^[A-Za-z0-9_.' -]{3,14}$/.test(v)) { lbStatus = "Taxallus 3-14 belgi: lotin harflari, raqam, bo'sh joy, nuqta, tire yoki pastki chiziq."; renderLb(); return; }
+  nick = v; store.set("sozle.nick", nick); lbStatus = ""; renderLb(); pushScore();
+});
+async function pushScore() {
+  if (!db || !myId || !nick || canWrite === false) return;
+  if (writing) { pending = true; return; }
+  writing = true;
+  try { await db.doc("players/" + myId).set({ name: nick, points: points, updatedAt: Date.now() }); lbStatus = ""; }
+  catch (e) { lbStatus = "Natija yuborilmadi (" + ((e && e.code) || "xato") + "). Reyting uchun sahifada yozish huquqi kerak."; }
+  writing = false;
+  renderLb();
+  if (pending) { pending = false; pushScore(); }
+}
+
+/* ---- aloqa ---- */
+$("contactForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const t = $("contactText").value.trim();
+  if (t.length < 5) { $("contactNote").textContent = "Xabar juda qisqa."; return; }
+  if (!db || !myId) { $("contactNote").textContent = "Xabar yuborish uchun claude.ai hisobiga kirish kerak."; return; }
+  try {
+    const ref = db.doc("contact/" + myId);
+    const snap = await ref.get();
+    const old = snap.exists && Array.isArray(snap.data().msgs) ? snap.data().msgs : [];
+    await ref.set({ msgs: old.concat([{ t: t.slice(0, 1000), at: Date.now(), nick: nick || "" }]).slice(-20), updatedAt: Date.now() });
+    $("contactText").value = ""; $("contactNote").textContent = "Xabar yuborildi. Rahmat!"; toast("Xabar yuborildi");
+  } catch (err) { $("contactNote").textContent = "Xabar yuborilmadi. Sahifada yozish huquqi kerak (" + ((err && err.code) || "xato") + ")."; }
+});
+
+/* ---- ulanishlar (db, user, room) ---- */
+async function initCaps() {
+  const c = window.claude;
+  if (!c || !c.use) return;
+  try { userNs = await c.use("user"); } catch (e) { userNs = null; }
+  try { db = await c.use("db"); } catch (e) { db = null; }
+  try { room = await c.use("room"); } catch (e) { room = null; }
+  if (userNs) {
+    try { myId = await userNs.id(); } catch (e) { myId = null; }
+    try { canWrite = await userNs.can("data.write"); } catch (e) { canWrite = null; }
+  }
+  if (db && myId) {
+    try {
+      const snap = await db.doc("players/" + myId).get();
+      const d = snap.exists ? snap.data() : null;
+      if (d && typeof d.points === "number" && d.points > points) {
+        points = d.points;
+        for (let i = 0; i <= tierIndex(points); i++) if (!reached.includes(i)) reached.push(i);
+        if (!nick && typeof d.name === "string") { nick = d.name; store.set("sozle.nick", nick); }
+        persist(); renderRank();
+      }
+    } catch (e) {}
+    try {
+      db.collection("players").orderBy("points", "desc").limit(100).onSnapshot(
+        snap => { lbDocs = snap.docs.map(d => Object.assign({ id: d.id }, d.data())); lbError = ""; renderLb(); },
+        err => { lbError = "Reytingni o'qib bo'lmadi (" + ((err && err.code) || "xato") + ")."; renderLb(); }
+      );
+    } catch (e) { lbError = "Reytingni ulab bo'lmadi."; }
+  }
+  if (screen === "auth") renderAuth();
+  if (screen === "comp") renderComp();
+  renderLb();
+  pushScore();
+}
+
+applySettings();
+refillHints();
+renderRank();
+renderScene(true);
+go("home");
+setInterval(() => { if (screen === "game" && G) { refillHints(); renderPower(); } }, 60000);
+initCaps();
+</script>
+</body>
+</html>
