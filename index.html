@@ -986,12 +986,19 @@ function syncMobileInput() {
   const v = current.join("");
   if (mobileInput.value !== v) mobileInput.value = v;
 }
-if (mobileInput) {
+/* "telefon klaviaturasi" tugmasi va taxtani bosib fokus olish faqat sensorli qurilmalarda ishlaydi;
+   noutbuk/sichqonchada taxtani bosish eski ekran-klaviaturasiga tegmasligi kerak (fizik klaviatura
+   mavjud klaviatura hodisasi orqali allaqachon ishlaydi) */
+const isTouch = (window.matchMedia && matchMedia("(pointer: coarse)").matches) || "ontouchstart" in window;
+if (mobileInput) $("kbBtn").hidden = !isTouch;
+if (mobileInput && isTouch) {
   boardEl.addEventListener("click", () => { if (G && !over && !locked) mobileInput.focus(); });
   $("kbBtn").addEventListener("click", () => { if (G && !over && !locked) mobileInput.focus(); });
   /* tizim klaviaturasi ochilganda ekrandagi maxsus klaviatura joy tejash uchun yashiriladi, ikkisi birga ko'rinmaydi */
   mobileInput.addEventListener("focus", () => { kbEl.hidden = true; $("kbBtn").hidden = true; });
   mobileInput.addEventListener("blur", () => { kbEl.hidden = false; $("kbBtn").hidden = false; });
+}
+if (mobileInput) {
   mobileInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
   mobileInput.addEventListener("input", () => {
     let v = mobileInput.value;
